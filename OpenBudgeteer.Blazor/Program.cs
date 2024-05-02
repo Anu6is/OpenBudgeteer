@@ -1,10 +1,9 @@
-using System;
-using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MudBlazor.Services;
 using OpenBudgeteer.Blazor;
 using OpenBudgeteer.Core.Common;
 using OpenBudgeteer.Core.Data;
@@ -12,6 +11,8 @@ using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.Data.Entities;
 using OpenBudgeteer.Core.Data.Services;
 using OpenBudgeteer.Core.ViewModels.Helper;
+using System;
+using System.Text;
 using Tewr.Blazor.FileReader;
 
 const string APPSETTINGS_CULTURE = "APPSETTINGS_CULTURE";
@@ -23,7 +24,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddLocalization();
 builder.Services.AddRazorPages();
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+                .AddInteractiveServerComponents();
+builder.Services.AddMudServices();
 builder.Services.AddFileReaderService();
 builder.Services.AddHostedService<HostedDatabaseMigrator>();
 builder.Services.AddDatabase(builder.Configuration);
