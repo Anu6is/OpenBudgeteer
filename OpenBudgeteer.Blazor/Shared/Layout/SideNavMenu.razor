@@ -1,0 +1,21 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudDrawer @bind-Open="@SideMenuDrawerOpen" Elevation="2" PreserveOpenState="true"
+           ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Mini" Color="@DrawerColor">
+    <MudNavMenu Color="Color.Secondary">
+        <MudNavLink Match="NavLinkMatch.All" Href="" Icon="@Icons.Material.Outlined.Dashboard" IconColor="Color.Surface">Dashboard</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="account" Icon="@Icons.Material.Outlined.AccountBalance" IconColor="Color.Surface">Accounts</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="transaction" Icon="@Icons.Material.Outlined.LocalAtm" IconColor="Color.Surface">Transactions</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="bucket" Icon="@Icons.Material.Outlined.AccountBalanceWallet" IconColor="Color.Surface">Budget</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="report" Icon="@Icons.Material.Outlined.InsertChart" IconColor="Color.Surface">Report</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="rules" Icon="@Icons.Material.Outlined.Description" IconColor="Color.Surface">Rules</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="dataconsistency" Icon="@Icons.Material.Outlined.ChangeCircle" IconColor="Color.Surface">Data Consistency</MudNavLink>
+    </MudNavMenu>
+</MudDrawer>
+
+@code {
+    [EditorRequired][Parameter] public bool SideMenuDrawerOpen { get; set; }
+
+    private Color DrawerColor => SideMenuDrawerOpen ? Color.Default : Color.Primary;
+}
+

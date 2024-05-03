@@ -12,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="css/bootstrap/@AppSettings.Theme/bootstrap.css" />
     <link rel="stylesheet" href="css/bootstrap/bootstrap-icons.css">
     <link href="css/site.css" rel="stylesheet" />    
     <style>
@@ -29,10 +28,10 @@
             -moz-appearance: textfield;
         }
     </style>
-    <HeadOutlet @rendermode="InteractiveServer" />
+    <HeadOutlet @rendermode="InteractiveServerMode" />
 </head>
 <body>
-    <Routes @rendermode="InteractiveServer"/>
+    <Routes @rendermode="InteractiveServerMode"/>
 
     <div id="blazor-error-ui" style="z-index: 1">
         @if (Env.IsDevelopment())
@@ -68,3 +67,7 @@
     <link rel="stylesheet" href="_content/ChartJs.Blazor/ChartJSBlazor.css"/>
 </body>
 </html>
+
+@code {
+    private IComponentRenderMode InteractiveServerMode = new InteractiveServerRenderMode(prerender: false);
+}

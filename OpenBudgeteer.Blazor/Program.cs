@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,7 +17,7 @@ using System.Text;
 using Tewr.Blazor.FileReader;
 
 const string APPSETTINGS_CULTURE = "APPSETTINGS_CULTURE";
-const string APPSETTINGS_THEME = "APPSETTINGS_THEME";
+const string APPSETTINGS_TITLE = "APPSETTINGS_TITLE";
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var builder = WebApplication.CreateBuilder(args);
@@ -27,8 +28,10 @@ builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 builder.Services.AddMudServices();
 builder.Services.AddFileReaderService();
+builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHostedService<HostedDatabaseMigrator>();
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddScoped<PreferenceManager>();
 builder.Services.AddScoped<IServiceManager, ServiceManager>(x => new ServiceManager(x.GetRequiredService<DbContextOptions<DatabaseContext>>()));
 builder.Services.AddScoped(x => new YearMonthSelectorViewModel(x.GetRequiredService<IServiceManager>()));
         
@@ -46,8 +49,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
         
-app.UseRequestLocalization(builder.Configuration.GetValue<string>(APPSETTINGS_CULTURE, "en-US") ?? "en-US");
-AppSettings.Theme = builder.Configuration.GetValue(APPSETTINGS_THEME, "Default") ?? "Default";
+app.UseRequestLocalization(builder.Configuration.GetValue<string>(APPSETTINGS_CULTURE, "en-US")!);
+AppSettings.Title = builder.Configuration.GetValue(APPSETTINGS_TITLE, "OpenBudgeteer")!;
 
 //app.UseRouting();
 app.UseAntiforgery();

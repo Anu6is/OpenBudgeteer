@@ -2,5 +2,5 @@
 
 public static class AppSettings
 {
-    public static string Theme { get; set; } = "default";
+    public static string Title { get; set; } = "OpenBudgeteer";
 }

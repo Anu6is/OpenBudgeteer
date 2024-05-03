@@ -1,0 +1,27 @@
+﻿@using OpenBudgeteer.Core.Common
+
+<MudAppBar Class="pl-1 pr-4" Elevation="1" Color="Color.Primary" Gutters="false">
+    <MudToggleIconButton Class="d-none d-sm-flex" Toggled="SideMenuDrawerOpen" ToggledChanged="ToggleSideMenuDrawer"
+                         Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit"
+                         ToggledIcon="@Icons.Material.Filled.MenuOpen" ToggledColor="Color.Inherit" />
+
+    <MudText Class="pl-2">@AppSettings.Title</MudText>
+
+    <MudSpacer />
+
+    <MudIconButton Icon="@Icons.Material.Filled.UploadFile" Color="Color.Inherit" Title="Import CSV" Href="import" />
+    
+    <MudToggleIconButton Toggled="DarkModeEnabled" ToggledChanged="ToggleThemeMode"
+                         Title="Switch to Dark Theme" Icon="@Icons.Material.Outlined.DarkMode" Color="@Color.Inherit"
+                         ToggledTitle="Switch to Light Theme" ToggledIcon="@Icons.Material.Filled.WbSunny" ToggledColor="@Color.Inherit" />
+    
+    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Title="Source Code" Href="https://github.com/TheAxelander/OpenBudgeteer" />
+</MudAppBar>
+
+@code {
+    [EditorRequired][Parameter] public bool DarkModeEnabled { get; set; }
+    [EditorRequired][Parameter] public EventCallback<bool> ToggleThemeMode { get; set; }
+
+    [EditorRequired][Parameter] public bool SideMenuDrawerOpen { get; set; }
+    [EditorRequired][Parameter] public EventCallback<bool> ToggleSideMenuDrawer { get; set; }
+}

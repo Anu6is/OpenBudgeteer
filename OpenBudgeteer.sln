@@ -12,31 +12,31 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{86A25C9F-8B53-47CC-B032-AF705FE284A2}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		README.md = README.md
-		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		CHANGELOG.md = CHANGELOG.md
+		CODE_OF_CONDUCT.md = CODE_OF_CONDUCT.md
 		LICENSE = LICENSE
 		LICENSE-3RD-PARTY = LICENSE-3RD-PARTY
+		README.md = README.md
 		SECURITY.md = SECURITY.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Sqlite.Migrations", "OpenBudgeteer.Core.Data.Sqlite.Migrations\OpenBudgeteer.Core.Data.Sqlite.Migrations.csproj", "{7D6ED82D-BAE4-4BC4-AEA9-22801037C6C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Sqlite.Migrations", "OpenBudgeteer.Core.Data.Sqlite.Migrations\OpenBudgeteer.Core.Data.Sqlite.Migrations.csproj", "{7D6ED82D-BAE4-4BC4-AEA9-22801037C6C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.MySql.Migrations", "OpenBudgeteer.Core.Data.MySql.Migrations\OpenBudgeteer.Core.Data.MySql.Migrations.csproj", "{3455E778-BED7-433F-A100-0874FF0D15C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.MySql.Migrations", "OpenBudgeteer.Core.Data.MySql.Migrations\OpenBudgeteer.Core.Data.MySql.Migrations.csproj", "{3455E778-BED7-433F-A100-0874FF0D15C7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data", "OpenBudgeteer.Core.Data\OpenBudgeteer.Core.Data.csproj", "{DEB5B758-7AA9-45C6-96C5-371DA35F9E5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data", "OpenBudgeteer.Core.Data\OpenBudgeteer.Core.Data.csproj", "{DEB5B758-7AA9-45C6-96C5-371DA35F9E5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Postgres.Migrations", "OpenBudgeteer.Core.Data.Postgres.Migrations\OpenBudgeteer.Core.Data.Postgres.Migrations.csproj", "{1CFB5354-FD8A-41AF-AB06-8929F163E04D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Postgres.Migrations", "OpenBudgeteer.Core.Data.Postgres.Migrations\OpenBudgeteer.Core.Data.Postgres.Migrations.csproj", "{1CFB5354-FD8A-41AF-AB06-8929F163E04D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Entities", "OpenBudgeteer.Core.Data.Entities\OpenBudgeteer.Core.Data.Entities.csproj", "{867AE9C6-F97A-4417-9AF6-5F4293F70C81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Entities", "OpenBudgeteer.Core.Data.Entities\OpenBudgeteer.Core.Data.Entities.csproj", "{867AE9C6-F97A-4417-9AF6-5F4293F70C81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Contracts", "OpenBudgeteer.Core.Data.Contracts\OpenBudgeteer.Core.Data.Contracts.csproj", "{BCA32F67-3FD5-44EC-904D-61E26CC7D7F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Contracts", "OpenBudgeteer.Core.Data.Contracts\OpenBudgeteer.Core.Data.Contracts.csproj", "{BCA32F67-3FD5-44EC-904D-61E26CC7D7F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Repository", "OpenBudgeteer.Core.Data.Repository\OpenBudgeteer.Core.Data.Repository.csproj", "{8DF83EAC-6BB2-4952-A0F2-29A512CA2181}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Repository", "OpenBudgeteer.Core.Data.Repository\OpenBudgeteer.Core.Data.Repository.csproj", "{8DF83EAC-6BB2-4952-A0F2-29A512CA2181}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.Core.Data.Services", "OpenBudgeteer.Core.Data.Services\OpenBudgeteer.Core.Data.Services.csproj", "{B93B1889-EF69-4EA6-8B7B-C0BD7D59BC51}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Services", "OpenBudgeteer.Core.Data.Services\OpenBudgeteer.Core.Data.Services.csproj", "{B93B1889-EF69-4EA6-8B7B-C0BD7D59BC51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenBudgeteer.API", "OpenBudgeteer.API\OpenBudgeteer.API.csproj", "{DBE045F5-B9C4-4A01-8317-A67BD6C6F606}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.API", "OpenBudgeteer.API\OpenBudgeteer.API.csproj", "{DBE045F5-B9C4-4A01-8317-A67BD6C6F606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
