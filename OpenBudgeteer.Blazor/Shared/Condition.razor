@@ -1,0 +1,14 @@
+﻿﻿@if (Evaluation is true)
+{
+    @Match
+}
+else
+{
+    @NotMatch
+}
+
+@code {
+    [EditorRequired][Parameter] public required bool Evaluation { get; set; }
+    [EditorRequired][Parameter] public required RenderFragment Match { get; set; }
+    [Parameter] public RenderFragment? NotMatch { get; set; }
+}
