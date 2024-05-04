@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.Core.Data.Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenBudgeteer.API", "OpenBudgeteer.API\OpenBudgeteer.API.csproj", "{DBE045F5-B9C4-4A01-8317-A67BD6C6F606}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mirgrations", "Mirgrations", "{09CAF705-11B0-424B-9494-91D27C23794E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7D6ED82D-BAE4-4BC4-AEA9-22801037C6C3} = {09CAF705-11B0-424B-9494-91D27C23794E}
+		{3455E778-BED7-433F-A100-0874FF0D15C7} = {09CAF705-11B0-424B-9494-91D27C23794E}
+		{1CFB5354-FD8A-41AF-AB06-8929F163E04D} = {09CAF705-11B0-424B-9494-91D27C23794E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F95D78BC-1413-4526-8D05-F39ECAA9A937}
