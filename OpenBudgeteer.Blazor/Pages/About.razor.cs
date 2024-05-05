@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
-public partial class Index : ComponentBase
+public partial class About : ComponentBase
 {
     private const string NEWS_SOURCE = "https://raw.githubusercontent.com/TheAxelander/OpenBudgeteer-News/main/README.md";
     private MarkupString _convertedHtml;

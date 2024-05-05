@@ -2,7 +2,7 @@
 
 <MudDrawer @bind-Open="@SideMenuDrawerOpen" Elevation="2" PreserveOpenState="true"
            ClipMode="DrawerClipMode.Always" Variant="@DrawerVariant.Mini" Color="@DrawerColor">
-    <MudNavMenu Color="Color.Secondary">
+    <MudNavMenu Class="d-flex flex-column mud-height-full" Color="Color.Secondary">
         <MudNavLink Match="NavLinkMatch.All" Href="" Icon="@Icons.Material.Outlined.Dashboard" IconColor="Color.Surface">Dashboard</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="account" Icon="@Icons.Material.Outlined.AccountBalance" IconColor="Color.Surface">Accounts</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="transaction" Icon="@Icons.Material.Outlined.LocalAtm" IconColor="Color.Surface">Transactions</MudNavLink>
@@ -10,6 +10,8 @@
         <MudNavLink Match="NavLinkMatch.All" Href="report" Icon="@Icons.Material.Outlined.InsertChart" IconColor="Color.Surface">Report</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="rules" Icon="@Icons.Material.Outlined.Description" IconColor="Color.Surface">Rules</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="dataconsistency" Icon="@Icons.Material.Outlined.ChangeCircle" IconColor="Color.Surface">Data Consistency</MudNavLink>
+        <MudSpacer />
+        <MudNavLink Class="pb-4" Match="NavLinkMatch.All" Href="about" Icon="@Icons.Material.Outlined.Info" IconColor="Color.Surface">About</MudNavLink>
     </MudNavMenu>
 </MudDrawer>
 
