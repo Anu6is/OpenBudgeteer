@@ -51,9 +51,11 @@ public static partial class DbContextOptionsFactory
     private static void SetupSqliteTempDbConnection(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration)
     {
         var dbFilePath = Path.GetTempFileName();
+        var assembly = configuration.GetValue<string>(ConfigurationKeyConstants.MIGRATION_ASSEMBLY);
+
         optionsBuilder.UseSqlite(
             $"Data Source={dbFilePath}",
-            b => b.MigrationsAssembly("OpenBudgeteer.Core.Data.Sqlite.Migrations"));
+            b => b.MigrationsAssembly(assembly));
     }
 
     private static void SetupSqliteConnection(DbContextOptionsBuilder optionsBuilder, IConfiguration configuration)

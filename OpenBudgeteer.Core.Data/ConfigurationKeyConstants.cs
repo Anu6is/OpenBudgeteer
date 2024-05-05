@@ -16,4 +16,6 @@ public static class ConfigurationKeyConstants
     public const string PROVIDER_POSTGRESQL = "POSTGRESQL";
     public const string PROVIDER_SQLITE = "SQLITE";
     public const string PROVIDER_TEMPDB = "TEMPDB";
+
+    public const string MIGRATION_ASSEMBLY = "MIGRATION_ASSEMBLY";
 }

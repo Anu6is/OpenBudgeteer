@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using OpenBudgeteer.Core.Data.Entities;
 using OpenBudgeteer.Core.Data.Initialization;
 using OpenBudgeteer.Core.Data.OnlineChecker;
+using OpenBudgeteer.Extensions.Data.Entities;
 
 namespace OpenBudgeteer.Blazor;
 
@@ -42,7 +43,7 @@ public class HostedDatabaseMigrator : IHostedService
             throw new InvalidOperationException("Target database is not online.");
         }
         
-        await using var context = new DatabaseContext(_dbContextOptions);
+        await using var context = new ExtendedDatabaseContext(_dbContextOptions);
 
         await context.Database.MigrateAsync(cancellationToken: cancellationToken);
 
