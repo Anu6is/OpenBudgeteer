@@ -1,10 +1,13 @@
-﻿@inherits LayoutComponentBase
+﻿@implements IDisposable
+
+@inherits LayoutComponentBase
 
 @using Microsoft.EntityFrameworkCore
 @using OpenBudgeteer.Core.Data.Entities
 
 @inject DbContextOptions<DatabaseContext> DbContextOptions
 @inject PreferenceManager PreferenceManager
+@inject NavigationManager NavigationManager
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -14,7 +17,9 @@
      <TopNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" ToggleSideMenuDrawer="SideMenuToggleAsync"
                  DarkModeEnabled="@_preferences.DarkMode" ToggleThemeMode="ToggleThemeAsync"/>
     
-    <SideNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" />
+    <CascadingValue Value="@MenuItem">
+        <SideNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" />
+    </CascadingValue>
     
     <MudMainContent Style="height: 100vh">
         <MudContainer MaxWidth="MaxWidth.Large" Class="px-8 pt-4">
@@ -53,6 +58,7 @@
 @code {
     private Preferences _preferences = new();
     private bool ShowOverlay { get; set; }
+    private string MenuItem { get; set; } = "";
 
     private ErrorBoundary? _errorBoundary;
 
@@ -65,6 +71,8 @@
     {
         _preferences = await PreferenceManager.LoadPreferencesAsync();
 
+        NavigationManager.LocationChanged += LocationChanged;
+
         await base.OnInitializedAsync();
     }
 
@@ -72,7 +80,7 @@
     {
         _preferences = await PreferenceManager.ModifyPreferencesAsync(x => x.MiniDrawer = value);
     }
-    
+
     async Task ToggleThemeAsync(bool value) 
     {
         _preferences = await PreferenceManager.ModifyPreferencesAsync(x => x.DarkMode = value);
@@ -80,4 +88,15 @@
     }
 
     private void ToggleOverlay() => ShowOverlay = !ShowOverlay;
+
+    public void LocationChanged(object? sender, LocationChangedEventArgs args)
+    {
+        MenuItem = NavigationManager.ToBaseRelativePath(args.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= LocationChanged;
+    }
 }
