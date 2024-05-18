@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OpenBudgeteer.Core.Data.Entities;
-using OpenBudgeteer.Extensions.Data.Entities.Models;
+using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
-namespace OpenBudgeteer.Extensions.Data.Entities;
+namespace OpenBudgeteer.Extensions.MetaData;
 
 public class ExtendedDatabaseContext(DbContextOptions<DatabaseContext> options) : DatabaseContext(options)
 {

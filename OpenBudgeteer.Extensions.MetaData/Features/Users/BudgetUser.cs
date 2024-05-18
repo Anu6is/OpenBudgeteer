@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace OpenBudgeteer.Extensions.Data.Entities.Models;
+namespace OpenBudgeteer.Extensions.MetaData.Features.Users;
 
 public class BudgetUser : IEntity
 {

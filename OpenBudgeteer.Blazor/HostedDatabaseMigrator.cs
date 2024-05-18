@@ -7,7 +7,7 @@ using Microsoft.Extensions.Hosting;
 using OpenBudgeteer.Core.Data.Entities;
 using OpenBudgeteer.Core.Data.Initialization;
 using OpenBudgeteer.Core.Data.OnlineChecker;
-using OpenBudgeteer.Extensions.Data.Entities;
+using OpenBudgeteer.Extensions.MetaData;
 
 namespace OpenBudgeteer.Blazor;
 

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace OpenBudgeteer.Extensions.Data.Entities.Migrations
+namespace OpenBudgeteer.Extensions.MetaData.Migrations
 {
     /// <inheritdoc />
     public partial class AddInitialRecords : Migration

@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OpenBudgeteer.Extensions.Data.Entities;
+using OpenBudgeteer.Extensions.MetaData;
 
 #nullable disable
 
-namespace OpenBudgeteer.Extensions.Data.Entities.Migrations
+namespace OpenBudgeteer.Extensions.MetaData.Migrations
 {
     [DbContext(typeof(ExtendedDatabaseContext))]
-    [Migration("20240506153114_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240506153908_AddInitialRecords")]
+    partial class AddInitialRecords
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OpenBudgeteer.Core.Data.Entities.Models;
+using OpenBudgeteer.Extensions.MetaData.Features.Users;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OpenBudgeteer.Extensions.Data.Entities.Models;
+namespace OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
 public class AccountDetail : IEntity
 {
@@ -29,7 +30,7 @@ public class AccountDetail : IEntity
 }
 
 [Owned]
-public sealed record Currency(string ISO_Code, string Symbol, short Precision = 2) { }
+public record Currency(string IsoCode, string Symbol, short Precision = 2) { }
 
 public enum AccountType
 {

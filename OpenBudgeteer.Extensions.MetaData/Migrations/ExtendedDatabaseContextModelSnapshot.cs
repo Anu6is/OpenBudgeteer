@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OpenBudgeteer.Extensions.Data.Entities;
+using OpenBudgeteer.Extensions.MetaData;
 
 #nullable disable
 
-namespace OpenBudgeteer.Extensions.Data.Entities.Migrations
+namespace OpenBudgeteer.Extensions.MetaData.Migrations
 {
     [DbContext(typeof(ExtendedDatabaseContext))]
     partial class ExtendedDatabaseContextModelSnapshot : ModelSnapshot
