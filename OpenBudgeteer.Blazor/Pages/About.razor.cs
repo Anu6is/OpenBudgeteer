@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Components;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 
 namespace OpenBudgeteer.Blazor.Pages;
 

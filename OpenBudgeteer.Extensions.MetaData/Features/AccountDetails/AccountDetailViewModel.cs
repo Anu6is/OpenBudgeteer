@@ -5,7 +5,7 @@ using OpenBudgeteer.Extensions.MetaData.Features.Users;
 
 namespace OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
-public class AccountDetailViewModel : AccountViewModel, ICloneable
+public class AccountDetailViewModel : AccountViewModel
 {
     public AccountType AccountType { get; set; }
 
@@ -19,7 +19,7 @@ public class AccountDetailViewModel : AccountViewModel, ICloneable
 
     public AccountDetailViewModel() : this(null, null) { }
 
-    public AccountDetailViewModel(IServiceManager serviceManager, AccountDetail? accountDetail) : base(serviceManager, accountDetail?.Account) 
+    public AccountDetailViewModel(IServiceManager serviceManager, AccountDetail? accountDetail) : base(serviceManager, accountDetail?.Account)
     {
         if (accountDetail is null) return;
 
@@ -29,7 +29,7 @@ public class AccountDetailViewModel : AccountViewModel, ICloneable
         AccountType = accountDetail.AccountType;
     }
 
-    protected AccountDetailViewModel(AccountDetailViewModel viewModel) : base(viewModel) 
+    protected AccountDetailViewModel(AccountDetailViewModel viewModel) : base(viewModel)
     {
         Alias = viewModel.Alias;
         SubType = viewModel.SubType;
@@ -40,7 +40,7 @@ public class AccountDetailViewModel : AccountViewModel, ICloneable
 
     public Account ToAccount()
     {
-        return new Account()
+        return new Account
         {
             Id = AccountId,
             Name = Name,
@@ -50,13 +50,13 @@ public class AccountDetailViewModel : AccountViewModel, ICloneable
 
     public AccountDetail ToAccountDetail()
     {
-        return new AccountDetail()
+        return new AccountDetail
         {
             Alias = Alias,
             SubType = SubType,
             Currency = Currency!,
             AccountId = AccountId,
-            AccountType = AccountType,
+            AccountType = AccountType
         };
     }
 }

@@ -1,5 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Components;
+using System;
 
 namespace OpenBudgeteer.Blazor.Services;
 
@@ -18,12 +18,12 @@ public class DrawerService
         set
         {
             if (_renderFragment == value) return;
-            
+
             _renderFragment = value;
             OnRenderFragmentChanged?.Invoke(value!);
         }
     }
-    
+
     // Toggles the state of the drawer and invokes the OnDrawerStateChanged event with the provided title.
     public void ToggleDrawer(string title)
     {

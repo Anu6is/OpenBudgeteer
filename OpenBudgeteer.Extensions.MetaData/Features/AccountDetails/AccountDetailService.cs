@@ -64,7 +64,7 @@ public class AccountDetailService(AccountDetailRepository repository) : IBaseSer
             var result = repository.Create(entity);
 
             if (result == 0) throw new Exception($"Unable to create {nameof(AccountDetail)} in database");
-            
+
             return entity;
         }
         catch (Exception e)

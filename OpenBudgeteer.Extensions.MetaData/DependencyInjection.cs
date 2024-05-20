@@ -10,10 +10,10 @@ public static class DependencyInjection
         services.AddScoped<AccountManager>();
         services.AddScoped<AccountDetailService>();
         services.AddScoped<AccountDetailRepository>();
-        
+
         services.AddScoped<ExtendedServiceManager>();
         services.AddDbContext<ExtendedDatabaseContext>();
 
         return services;
-    } 
+    }
 }

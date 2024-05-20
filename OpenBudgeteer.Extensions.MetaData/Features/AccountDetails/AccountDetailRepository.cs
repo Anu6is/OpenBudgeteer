@@ -41,17 +41,17 @@ public class AccountDetailRepository(ExtendedDatabaseContext databaseContext) : 
     {
         var entity = databaseContext.AccountDetail.FirstOrDefault(i => i.Id == id)
             ?? throw new Exception($"Account with id {id} not found.");
-        
+
         databaseContext.AccountDetail.Remove(entity);
-        
+
         return databaseContext.SaveChanges();
     }
 
     public int DeleteRange(IEnumerable<Guid> ids)
     {
         var entities = databaseContext.AccountDetail.Where(i => ids.Contains(i.Id));
-        
-        if (!entities.Any()) throw new Exception($"No Account found with passed IDs.");
+
+        if (!entities.Any()) throw new Exception("No Account found with passed IDs.");
 
         databaseContext.AccountDetail.RemoveRange(entities);
         return databaseContext.SaveChanges();

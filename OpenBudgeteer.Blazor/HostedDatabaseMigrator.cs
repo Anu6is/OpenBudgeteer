@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +5,9 @@ using OpenBudgeteer.Core.Data.Entities;
 using OpenBudgeteer.Core.Data.Initialization;
 using OpenBudgeteer.Core.Data.OnlineChecker;
 using OpenBudgeteer.Extensions.MetaData;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor;
 
@@ -17,7 +17,7 @@ public class HostedDatabaseMigrator : IHostedService
     private readonly IConfiguration _configuration;
     private readonly IDatabaseInitializer _databaseInitializer;
     private readonly IDatabaseOnlineChecker _onlineChecker;
-    
+
     private const string APPSETTINGS_DEMO_DATA = "APPSETTINGS_DEMO_DATA";
 
     public HostedDatabaseMigrator(
@@ -35,14 +35,14 @@ public class HostedDatabaseMigrator : IHostedService
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         _databaseInitializer.InitializeDatabase(_configuration);
-        
+
         // Wait for DB online
         var isOnline = _onlineChecker.IsDbOnline(_configuration);
         if (!isOnline)
         {
             throw new InvalidOperationException("Target database is not online.");
         }
-        
+
         await using var context = new ExtendedDatabaseContext(_dbContextOptions);
 
         await context.Database.MigrateAsync(cancellationToken: cancellationToken);

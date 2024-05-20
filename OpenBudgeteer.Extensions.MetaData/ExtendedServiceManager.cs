@@ -7,7 +7,7 @@ namespace OpenBudgeteer.Extensions.MetaData;
 
 public class ExtendedServiceManager(DbContextOptions<DatabaseContext> dbContextOptions) : ServiceManager(dbContextOptions)
 {
-    private readonly DbContextOptions<DatabaseContext> dbContextOptions = dbContextOptions;
+    private readonly DbContextOptions<DatabaseContext> _dbContextOptions = dbContextOptions;
 
-    public AccountDetailService AccountDetailService => new(new AccountDetailRepository(new ExtendedDatabaseContext(dbContextOptions)));
+    public AccountDetailService AccountDetailService => new(new AccountDetailRepository(new ExtendedDatabaseContext(_dbContextOptions)));
 }

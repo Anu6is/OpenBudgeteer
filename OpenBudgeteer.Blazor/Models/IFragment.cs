@@ -1,6 +1,6 @@
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Components;
 
 namespace OpenBudgeteer.Blazor.Models;
 
@@ -23,7 +23,7 @@ public static class FragmentExtension
     }
 
     public static RenderFragment CreateRenderFragmentFrom<T, TData>(Action<TData>? callback = null,
-        Dictionary<string, object>? parameters = null) 
+        Dictionary<string, object>? parameters = null)
         where T : IFragment, new()
     {
         return builder =>

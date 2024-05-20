@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using OpenBudgeteer.Core.Common;
 using OpenBudgeteer.Core.Common.Extensions;
@@ -8,6 +5,9 @@ using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.EntityViewModels;
 using OpenBudgeteer.Core.ViewModels.Helper;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
@@ -111,9 +111,9 @@ public partial class Transaction : ComponentBase
     private void Filter_SelectionChanged(string? value)
     {
         if (string.IsNullOrEmpty(value)) return;
-        
-        _dataContext.CurrentFilter = Enum.TryParse(typeof(TransactionFilter), value, out var result) 
-            ? (TransactionFilter)result 
+
+        _dataContext.CurrentFilter = Enum.TryParse(typeof(TransactionFilter), value, out var result)
+            ? (TransactionFilter)result
             : TransactionFilter.NoFilter;
     }
 
@@ -151,11 +151,11 @@ public partial class Transaction : ComponentBase
     {
         _isBucketSelectDialogVisible = true;
         _isBucketSelectDialogLoading = true;
-        
+
         _partialBucketViewModelToBeUpdated = partialBucketViewModel;
         _bucketSelectDialogDataContext = new BucketListingViewModel(ServiceManager, YearMonthDataContext);
         await _bucketSelectDialogDataContext.LoadDataAsync(true, true);
-        
+
         _isBucketSelectDialogLoading = false;
         StateHasChanged();
     }
@@ -173,7 +173,7 @@ public partial class Transaction : ComponentBase
             _errorModalDialogMessage = result.Message;
             _isErrorModalDialogVisible = true;
         }
-		if (result.ViewModelReloadRequired)
+        if (result.ViewModelReloadRequired)
         {
             await _dataContext.LoadDataAsync();
             StateHasChanged();

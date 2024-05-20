@@ -1,14 +1,14 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
 public partial class DataConsistency : ComponentBase
 {
     [Inject] private IServiceManager ServiceManager { get; set; } = null!;
-    
+
     DataConsistencyPageViewModel _dataContext = null!;
 
     private bool _isLoadingDialogVisible;

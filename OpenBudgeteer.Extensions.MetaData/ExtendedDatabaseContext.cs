@@ -6,6 +6,6 @@ namespace OpenBudgeteer.Extensions.MetaData;
 
 public class ExtendedDatabaseContext(DbContextOptions<DatabaseContext> options) : DatabaseContext(options)
 {
-    public DbSet<AccountDetail> AccountDetail { get; set; }
+    public DbSet<AccountDetail> AccountDetail { get; init; }
 
 }

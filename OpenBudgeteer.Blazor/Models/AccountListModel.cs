@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 using System;
-using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OpenBudgeteer.Blazor.Models;

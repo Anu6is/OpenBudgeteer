@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Linq;
-using System.Threading.Tasks;
-using ChartJs.Blazor.ChartJS.BarChart;
+﻿using ChartJs.Blazor.ChartJS.BarChart;
 using ChartJs.Blazor.ChartJS.BarChart.Axes;
 using ChartJs.Blazor.ChartJS.Common.Axes;
 using ChartJs.Blazor.ChartJS.Common.Axes.Ticks;
@@ -16,6 +10,12 @@ using ChartJs.Blazor.ChartJS.LineChart;
 using ChartJs.Blazor.Util;
 using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.ViewModels;
 
@@ -184,7 +184,7 @@ public class BlazorReportPageViewModel : ReportPageViewModel
 
         var incomeResults = new List<object>();
         var expensesResults = new List<object>();
-        
+
         foreach (var (month, income, expenses) in await LoadMonthIncomeExpensesAsync())
         {
             incomeResults.Add(income);
@@ -315,7 +315,7 @@ public class BlazorReportPageViewModel : ReportPageViewModel
             };
             newDataSet.AddRange(expensesResults);
             newConfig.Data.Datasets.Add(newDataSet);
-            
+
             MonthBucketExpensesConfigs.Add(new Tuple<string, BarConfig>(
                 result.BucketName,
                 newConfig));

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using OpenBudgeteer.Blazor.ViewModels;
@@ -7,6 +6,7 @@ using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.EntityViewModels;
 using OpenBudgeteer.Core.ViewModels.Helper;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
@@ -28,7 +28,7 @@ public partial class Bucket : ComponentBase
 
     private bool _isDeleteBucketGroupDialogVisible;
     private BucketGroupViewModel? _bucketGroupToBeDeleted;
-    
+
     private bool _isCloseBucketDialogVisible;
     private BucketViewModel? _bucketToBeClosed;
 
@@ -41,8 +41,8 @@ public partial class Bucket : ComponentBase
         _dataContext = new BucketPageViewModel(ServiceManager, YearMonthDataContext);
 
         await HandleResult(await _dataContext.LoadDataAsync());
-        
-        YearMonthDataContext.SelectedYearMonthChanged += async (sender, args) => 
+
+        YearMonthDataContext.SelectedYearMonthChanged += async (sender, args) =>
         {
             await HandleResult(await _dataContext.LoadDataAsync());
             StateHasChanged();
@@ -76,23 +76,23 @@ public partial class Bucket : ComponentBase
     {
         _isNewBucketGroupModalDialogVisible = false;
     }
-    
+
     private void HandleBucketGroupDeleteRequest(BucketGroupViewModel bucketGroup)
     {
         _bucketGroupToBeDeleted = bucketGroup;
         _isDeleteBucketGroupDialogVisible = true;
     }
-    
+
     private void CancelDeleteBucketGroup()
     {
         _isDeleteBucketGroupDialogVisible = false;
         _bucketGroupToBeDeleted = null;
     }
-    
+
     private async void DeleteBucketGroup()
     {
         _isDeleteBucketGroupDialogVisible = false;
-        if(_bucketGroupToBeDeleted != null) await HandleResult(_bucketGroupToBeDeleted.DeleteGroup());
+        if (_bucketGroupToBeDeleted != null) await HandleResult(_bucketGroupToBeDeleted.DeleteGroup());
         _bucketGroupToBeDeleted = null;
         StateHasChanged();
     }
@@ -149,7 +149,7 @@ public partial class Bucket : ComponentBase
             _errorModalDialogMessage = result.Message;
             _isErrorModalDialogVisible = true;
         }
-		if (result.ViewModelReloadRequired)
+        if (result.ViewModelReloadRequired)
         {
             await _dataContext.LoadDataAsync();
             StateHasChanged();

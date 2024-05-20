@@ -16,7 +16,7 @@ public class AccountManager(ExtendedServiceManager serviceManager)
             accountDetails.AccountId = account.Id;
             serviceManager.AccountDetailService.Create(accountDetails);
 
-            var initialBalance = new BankTransaction()
+            var initialBalance = new BankTransaction
             {
                 Id = Guid.Empty,
                 TransactionDate = DateTime.UtcNow.Date.Subtract(TimeSpan.FromDays(1)),

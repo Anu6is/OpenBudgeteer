@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ChartJs.Blazor.ChartJS.BarChart;
 using Microsoft.AspNetCore.Components;
 using OpenBudgeteer.Blazor.ViewModels;
 using OpenBudgeteer.Core.Data.Contracts.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
@@ -26,7 +26,7 @@ public partial class Report : ComponentBase
         await _dataContext.LoadDataAsync();
 
         var halfIndex = _dataContext.MonthBucketExpensesConfigs.Count / 2;
-        _monthBucketExpensesConfigsLeft.AddRange(_dataContext.MonthBucketExpensesConfigs.ToList().GetRange(0,halfIndex));
-        _monthBucketExpensesConfigsRight.AddRange(_dataContext.MonthBucketExpensesConfigs.ToList().GetRange(halfIndex,_dataContext.MonthBucketExpensesConfigs.Count - halfIndex));
+        _monthBucketExpensesConfigsLeft.AddRange(_dataContext.MonthBucketExpensesConfigs.ToList().GetRange(0, halfIndex));
+        _monthBucketExpensesConfigsRight.AddRange(_dataContext.MonthBucketExpensesConfigs.ToList().GetRange(halfIndex, _dataContext.MonthBucketExpensesConfigs.Count - halfIndex));
     }
 }

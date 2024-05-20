@@ -19,7 +19,7 @@ namespace OpenBudgeteer.Extensions.MetaData.Migrations
                 table: "Bucket",
                 columns: ["BucketId", "Name", "BucketGroupId", "ValidFrom", "IsInactive", "IsInactiveFrom"],
                 values: [Guid.Parse("00000000-0000-0000-0000-000000000001"), "Income", Guid.Parse("00000000-0000-0000-0000-000000000001"), "1990-01-01", false, $"{DateTime.MaxValue:yyyy-MM-dd}"]);
-            
+
             migrationBuilder.InsertData(
                 table: "Bucket",
                 columns: ["BucketId", "Name", "BucketGroupId", "ValidFrom", "IsInactive", "IsInactiveFrom"],

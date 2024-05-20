@@ -41,7 +41,7 @@ builder.Services.AddScoped<PreferenceManager>();
 builder.Services.AddScoped<DrawerService>();
 builder.Services.AddScoped<IServiceManager, ExtendedServiceManager>(x => new ExtendedServiceManager(x.GetRequiredService<DbContextOptions<DatabaseContext>>()));
 builder.Services.AddScoped(x => new YearMonthSelectorViewModel(x.GetRequiredService<IServiceManager>()));
-        
+
 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); // Required to read ANSI Text files
 
 var app = builder.Build();
@@ -55,7 +55,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-        
+
 app.UseRequestLocalization(builder.Configuration.GetValue<string>(APPSETTINGS_CULTURE, "en-US")!);
 AppSettings.Title = builder.Configuration.GetValue(APPSETTINGS_TITLE, "OpenBudgeteer")!;
 

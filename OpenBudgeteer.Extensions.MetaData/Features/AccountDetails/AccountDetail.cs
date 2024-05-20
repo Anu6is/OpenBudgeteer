@@ -30,7 +30,7 @@ public class AccountDetail : IEntity
 }
 
 [Owned]
-public record Currency(string IsoCode, string Symbol, short Precision = 2) { }
+public record Currency(string IsoCode, string Symbol, short Precision = 2);
 
 public enum AccountType
 {

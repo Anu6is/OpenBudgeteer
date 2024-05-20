@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using OpenBudgeteer.Core.Common;
 using OpenBudgeteer.Core.Common.Extensions;
@@ -7,6 +5,8 @@ using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.EntityViewModels;
 using OpenBudgeteer.Core.ViewModels.Helper;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
@@ -70,11 +70,11 @@ public partial class Rules : ComponentBase
     {
         _isBucketSelectDialogVisible = true;
         _isBucketSelectDialogLoading = true;
-        
+
         _ruleSetViewModelToBeUpdated = ruleSetViewModel;
         _bucketSelectDialogDataContext = new BucketListingViewModel(ServiceManager, null);
         await _bucketSelectDialogDataContext.LoadDataAsync(false, true);
-        
+
         _isBucketSelectDialogLoading = false;
         StateHasChanged();
     }
@@ -92,7 +92,7 @@ public partial class Rules : ComponentBase
                 ? (MappingRuleComparisonField)result
                 : MappingRuleComparisonField.Account;
     }
-    
+
     private void ComparisionType_SelectionChanged(string? value, MappingRuleViewModel mappingRule)
     {
         if (string.IsNullOrEmpty(value)) return;
@@ -100,7 +100,7 @@ public partial class Rules : ComponentBase
             ? (MappingRuleComparisonType)result
             : MappingRuleComparisonType.Equal;
     }
-    
+
     private void HandleShowDeleteRuleSetDialog(RuleSetViewModel ruleSet)
     {
         _ruleSetToBeDeleted = ruleSet;
@@ -126,7 +126,7 @@ public partial class Rules : ComponentBase
             _errorModalDialogMessage = result.Message;
             _isErrorModalDialogVisible = true;
         }
-		if (result.ViewModelReloadRequired)
+        if (result.ViewModelReloadRequired)
         {
             await _dataContext.LoadDataAsync();
             StateHasChanged();

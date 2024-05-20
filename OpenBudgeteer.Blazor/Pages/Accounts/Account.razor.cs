@@ -41,7 +41,7 @@ public partial class Account : ComponentBase
 
     private void CreateNewAccount(AccountModel model)
     {
-        var account = new AccountDetailViewModel() 
+        var account = new AccountDetailViewModel()
         {
             Name = model.Title,
             Alias = model.Alias,
@@ -149,7 +149,7 @@ public partial class Account : ComponentBase
         DrawerService.RenderFragment = FragmentExtension.CreateRenderFragmentFrom<FormComponent<T, AccountModel>, AccountModel>(CreateNewAccount,
             new Dictionary<string, object>()
             {
-                { "AccountType", accountType } 
+                { "AccountType", accountType }
             });
 
         DrawerService.ToggleDrawer("Add New Account");

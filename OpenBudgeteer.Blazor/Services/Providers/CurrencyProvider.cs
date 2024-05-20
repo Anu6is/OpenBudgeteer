@@ -13,7 +13,7 @@ public class CurrencyProvider(IOptions<CurrencyOptions> options)
 
 public class CurrencyOptions
 {
-    public static string Section { get;} = nameof(CurrencyOptions);
+    public static string Section { get; } = nameof(CurrencyOptions);
 
     public string? Default { get; set; }
     public Currency[] Currencies { get; set; } = [];

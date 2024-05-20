@@ -1,8 +1,3 @@
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.JSInterop;
@@ -10,6 +5,11 @@ using OpenBudgeteer.Core.Common;
 using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.EntityViewModels;
 using OpenBudgeteer.Core.ViewModels.PageViewModels;
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenBudgeteer.Blazor.Pages;
 
@@ -58,7 +58,7 @@ public partial class Import : ComponentBase
     protected override void OnInitialized()
     {
         _dataContext = new ImportPageViewModel(ServiceManager);
-        
+
         LoadData();
         LoadFromQueryParams();
     }
@@ -81,7 +81,7 @@ public partial class Import : ComponentBase
     private void LoadData()
     {
         HandleResult(_dataContext.LoadData());
-        
+
         _step2Enabled = false;
         _step3Enabled = false;
         _step4Enabled = false;
@@ -131,7 +131,7 @@ public partial class Import : ComponentBase
         }
         catch (Exception e)
         {
-             return new ViewModelOperationResult(false, $"Failed to load CSV: {e.Message}");
+            return new ViewModelOperationResult(false, $"Failed to load CSV: {e.Message}");
         }
     }
 
@@ -142,15 +142,15 @@ public partial class Import : ComponentBase
         _infoDialogMessage = "Uploading and processing file...";
         _isInfoDialogInteractionEnabled = false;
         _isInfoDialogVisible = true;
-        
+
         var file = (await FileReaderService.CreateReference(_inputElement).EnumerateFilesAsync()).FirstOrDefault();
         if (file == null) return;
         HandleResult(await _dataContext.HandleOpenFileAsync(await file.OpenReadAsync()));
-        
+
         _isInfoDialogVisible = false;
         _step2Enabled = true;
     }
-    
+
     private void LoadProfile()
     {
         _dataContext.ResetLoadFigures();
@@ -183,13 +183,13 @@ public partial class Import : ComponentBase
     private void CheckColumnMapping()
     {
         _step4Enabled = false;
-        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.TransactionDateColumnName) || 
+        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.TransactionDateColumnName) ||
             _dataContext.SelectedImportProfile.TransactionDateColumnName == ImportPageViewModel.DummyColumn) return;
         // Make Payee optional
         //if (string.IsNullOrEmpty(_dataContext.PayeeColumn) || _dataContext.PayeeColumn == PLACEHOLDER_ITEM_VALUE) return;
-        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.MemoColumnName) || 
+        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.MemoColumnName) ||
             _dataContext.SelectedImportProfile.MemoColumnName == ImportPageViewModel.DummyColumn) return;
-        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.AmountColumnName) || 
+        if (string.IsNullOrEmpty(_dataContext.SelectedImportProfile.AmountColumnName) ||
             _dataContext.SelectedImportProfile.AmountColumnName == ImportPageViewModel.DummyColumn) return;
         _step4Enabled = true;
     }
@@ -222,14 +222,14 @@ public partial class Import : ComponentBase
         _forceShowStep1 = true;
         StateHasChanged();
     }
-    
+
     private void SelectedImportProfile_SelectionChanged(string? value)
     {
         if (string.IsNullOrEmpty(value)) return;
         var selection = _dataContext.AvailableImportProfiles
             .First(i => i.ImportProfileId == Guid.Parse(value));
         // This copy prevents on-the-fly updates e.g. on Profile Name for AvailableImportProfiles
-        _dataContext.SelectedImportProfile = ImportProfileViewModel.CreateAsCopy(selection); 
+        _dataContext.SelectedImportProfile = ImportProfileViewModel.CreateAsCopy(selection);
         _step3Enabled = false;
         _step4Enabled = false;
         if (_dataContext.SelectedImportProfile.ImportProfileId != Guid.Empty) LoadProfile();
@@ -238,7 +238,7 @@ public partial class Import : ComponentBase
     private void TargetAccount_SelectionChanged(string? value)
     {
         if (string.IsNullOrEmpty(value)) return;
-        _dataContext.SelectedImportProfile.Account = 
+        _dataContext.SelectedImportProfile.Account =
             _dataContext.AvailableAccounts.First(i => i.AccountId == Guid.Parse(value));
     }
 
@@ -256,11 +256,11 @@ public partial class Import : ComponentBase
                 _dataContext.SelectedImportProfile.PayeeColumnName = newValue;
                 break;
             case MappingColumn.Memo:
-                _dataContext.SelectedImportProfile.MemoColumnName = newValue; 
+                _dataContext.SelectedImportProfile.MemoColumnName = newValue;
                 CheckColumnMapping();
                 break;
             case MappingColumn.Amount:
-                _dataContext.SelectedImportProfile.AmountColumnName = newValue; 
+                _dataContext.SelectedImportProfile.AmountColumnName = newValue;
                 CheckColumnMapping();
                 break;
             case MappingColumn.Credit:

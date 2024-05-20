@@ -7,14 +7,12 @@ using ChartJs.Blazor.ChartJS.Common.Properties;
 using ChartJs.Blazor.ChartJS.Common.Time;
 using ChartJs.Blazor.ChartJS.LineChart;
 using ChartJs.Blazor.Util;
+using OpenBudgeteer.Core.Data.Contracts.Services;
+using OpenBudgeteer.Core.ViewModels.Helper;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Threading.Tasks;
-using OpenBudgeteer.Core.Data.Contracts.Services;
-using OpenBudgeteer.Core.Data.Entities.Models;
-using OpenBudgeteer.Core.ViewModels.EntityViewModels;
-using OpenBudgeteer.Core.ViewModels.Helper;
 
 namespace OpenBudgeteer.Blazor.ViewModels
 {
