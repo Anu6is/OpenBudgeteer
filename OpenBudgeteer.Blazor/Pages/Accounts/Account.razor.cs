@@ -53,7 +53,7 @@ public partial class Account : ComponentBase
 
         HandleResult(AccountManager.CreateAccount(account));
 
-        DrawerService.ToggleDrawer(string.Empty);
+        DrawerService.ToggleDrawer();
 
         _selectedCurrency = model.Currency;
     }

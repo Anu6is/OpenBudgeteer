@@ -25,9 +25,9 @@ public class DrawerService
     }
 
     // Toggles the state of the drawer and invokes the OnDrawerStateChanged event with the provided title.
-    public void ToggleDrawer(string title)
+    public void ToggleDrawer(string? title = null)
     {
         DrawerOpen = !DrawerOpen;
-        OnDrawerStateChanged?.Invoke(title);
+        OnDrawerStateChanged?.Invoke(title ?? string.Empty);
     }
 }
