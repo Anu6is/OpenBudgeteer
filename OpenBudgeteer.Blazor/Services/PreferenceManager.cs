@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace OpenBudgeteer.Blazor;
+namespace OpenBudgeteer.Blazor.Services;
 
 public class PreferenceManager(ILocalStorageService localStorageService)
 {

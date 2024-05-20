@@ -1,0 +1,9 @@
+﻿@*
+<h3>AccountGrid</h3>
+
+@code {
+    [CascadingParameter] Guid OwnerId { get; set; }
+
+    [EditorRequired][Parameter] public required Dictionary<string, AccountListModel> Accounts { get; set; }
+}
+*@

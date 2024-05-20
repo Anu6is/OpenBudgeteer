@@ -1,0 +1,48 @@
+﻿@page "/account"
+
+@inject DrawerService DrawerService
+
+<Condition Evaluation="@_initialized">
+    <Match>
+        <ActionBar>
+            <Label>
+                <MudText Typo="Typo.h6">Accounts</MudText>
+            </Label>
+            <Actions>
+                <MudStack Class="flex-wrap" Row="true" AlignItems="AlignItems.Center">
+                    <MudToggleIconButton Variant="Variant.Filled"                
+                                         Toggled="_showInactive" ToggledChanged="OnVisibilityChanged"
+                                         Title="Show Inactive Accounts" ToggledTitle="Hide Inactive Accounts"
+                                         Icon="@Icons.Material.Filled.RemoveRedEye" ToggledIcon="@Icons.Material.Filled.VisibilityOff" />
+
+                    <MudToggleIconButton Variant="Variant.Filled"
+                                         Toggled="_gridView" ToggledChanged="OnViewChanged"
+                                         Title="Switch To Grid View" ToggledTitle="Switch to List View"
+                                         Icon="@Icons.Material.Filled.GridView" ToggledIcon="@Icons.Material.Filled.ViewList" />
+
+                    <MudMenu Color="Color.Primary" Variant="Variant.Filled" Label="Add Account" StartIcon="@Icons.Material.Filled.Add"
+                             AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Cash))">Cash Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Deposit))">Bank Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Credit))">Credit Card Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Investment))">Investment Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Loan))">Loan (Borrowing)</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Loan))">Loan (Lending)</MudMenuItem>
+                    </MudMenu>
+                </MudStack>
+            </Actions>
+        </ActionBar>
+
+        <MudContainer Class="d-flex flex-grow-1 flex-wrap-reverse justify-space-between py-8 gap-6" MaxWidth="MaxWidth.ExtraLarge">
+            <Condition Evaluation="@_gridView">
+                <Match>
+                    GRID
+                    @* <AccountGridView Accounts="@_accounts" /> *@
+                </Match>
+                <NotMatch>
+                    <AccountListView Accounts="@_accounts" SelectedCurrency="@_selectedCurrency" OnDeleteAccount="CloseAccount" OnEditAccount="EditAccount" />
+                </NotMatch>
+            </Condition>
+        </MudContainer>
+    </Match>
+</Condition>

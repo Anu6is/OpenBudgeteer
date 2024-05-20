@@ -1,0 +1,10 @@
+﻿<MudToolBar WrapContent Dense Gutters>
+    @Label
+    <MudSpacer />
+    @Actions
+</MudToolBar>
+
+@code {
+    [EditorRequired][Parameter] public required RenderFragment Label { get; set; }
+    [Parameter] public RenderFragment? Actions { get; set; }
+}

@@ -1,0 +1,51 @@
+﻿@implements IFragment
+@inject CurrencyProvider CurrencyProvider
+
+<MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success" ValidationDelay="0">
+    <MudTextField T="string" @bind-Value="_model.Title" For="@(() => _model.Title!)" Immediate="true" Margin="Margin.Dense"
+                  Placeholder="New Account" Required="true" RequiredError="Title is required!" HelperTextOnFocus="true"
+                  MaxLength="15" HelperText="Max. 15 characters" />
+    <MudStack Class="pb-8" Row="true" Justify="Justify.SpaceBetween">
+        <MudTextField T="decimal?" @bind-Value="_model.Balance" For="@(() => _model.Balance)" Immediate="true" Margin="Margin.Dense"
+                      Required="true" RequiredError="Amount is required!" />
+        <MudSelect OuterClass="mt-n1" T="Currency" @bind-Value="_model.Currency" For="@(() => _model.Currency!)" Immediate="true" Style="width:120px;"
+                   Margin="Margin.Dense" Dense="true" Variant="Variant.Filled" Required="true" RequiredError="Currency is required!">
+            <Iteration Items="@CurrencyProvider.Currencies" Context="currency">
+                <MudSelectItem Value="@currency">@currency.IsoCode</MudSelectItem>
+            </Iteration>
+        </MudSelect>
+    </MudStack>
+    <MudStack Row="true" Class="pt-8" Justify="Justify.FlexEnd">
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)" OnClick="@Submit">Create</MudButton>
+    </MudStack>
+</MudForm>
+
+@code {
+    private bool _success;
+    private MudForm? _form;
+    private readonly AccountModel _model = new();
+
+    [Parameter]
+    public AccountType AccountType { get; set; }
+
+    [Parameter] 
+    public Action<AccountModel> CallbackMethod { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _model.AccountType = AccountType;
+        _model.Currency = CurrencyProvider.DefaultCurrency;
+    }
+
+    private async Task Submit()
+    {
+        await _form!.Validate();
+
+        if (_form.IsValid)
+        {
+            CallbackMethod.Invoke(_model);
+        }
+    }
+}

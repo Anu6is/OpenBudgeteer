@@ -5,24 +5,44 @@
 @using Microsoft.EntityFrameworkCore
 @using OpenBudgeteer.Core.Data.Entities
 
-@inject DbContextOptions<DatabaseContext> DbContextOptions
 @inject PreferenceManager PreferenceManager
 @inject NavigationManager NavigationManager
+@inject DrawerService DrawerService
 
 <MudThemeProvider />
 <MudDialogProvider />
+<MudPopoverProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-     <TopNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" ToggleSideMenuDrawer="SideMenuToggleAsync"
+    <TopNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" ToggleSideMenuDrawer="SideMenuToggleAsync"
                  DarkModeEnabled="@_preferences.DarkMode" ToggleThemeMode="ToggleThemeAsync"/>
     
     <CascadingValue Value="@MenuItem">
         <SideNavMenu SideMenuDrawerOpen="@_preferences.MiniDrawer" />
     </CascadingValue>
+
+    <Condition Evaluation="@DrawerService.DrawerOpen">
+        <Match>
+            <MudDrawer Class="d-flex pr-4" Open="true" Elevation="5" PreserveOpenState="true" Width="25vw" 
+                       Style="min-width:280px;" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Right" 
+                       Variant="@DrawerVariant.Temporary" Fixed>
+                <MudDrawerHeader Class="justify-center" Dense>
+                    <MudText Typo="Typo.h6">@DrawerTitle</MudText>
+                </MudDrawerHeader>
+                @DrawerContent
+                <MudSpacer />
+                <MudButton Class="my-8" Color="Color.Inherit" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Close"
+                           Style="width:fit-content; min-height:25px; align-self:center;"
+                           OnClick="@(() => DrawerService.ToggleDrawer(string.Empty))">
+                    Close
+                </MudButton>
+            </MudDrawer>
+        </Match>
+    </Condition>
     
-    <MudMainContent Style="height: 100vh">
-        <MudContainer MaxWidth="MaxWidth.Large" Class="px-8 pt-4">
+     <MudMainContent Style="height: 100vh">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="px-8 pt-4">
             <ErrorBoundary @ref="_errorBoundary">
                 <ChildContent>
                     <CascadingValue Value="@_preferences.DarkMode">
@@ -57,6 +77,8 @@
 
 @code {
     private Preferences _preferences = new();
+    private RenderFragment? DrawerContent { get; set; }
+    private string? DrawerTitle { get; set; }
     private bool ShowOverlay { get; set; }
     private string MenuItem { get; set; } = "";
 
@@ -72,6 +94,8 @@
         _preferences = await PreferenceManager.LoadPreferencesAsync();
 
         NavigationManager.LocationChanged += LocationChanged;
+        DrawerService.OnDrawerStateChanged += DrawerStateChanged;
+        DrawerService.OnRenderFragmentChanged += RenderFragmentChanged;
 
         await base.OnInitializedAsync();
     }
@@ -89,14 +113,30 @@
 
     private void ToggleOverlay() => ShowOverlay = !ShowOverlay;
 
-    public void LocationChanged(object? sender, LocationChangedEventArgs args)
+    private void LocationChanged(object? sender, LocationChangedEventArgs args)
     {
         MenuItem = NavigationManager.ToBaseRelativePath(args.Location);
+        StateHasChanged();
+    }
+
+    private void DrawerStateChanged(string title)
+    {
+        DrawerTitle = title;
+
+        StateHasChanged();
+    }
+
+    private void RenderFragmentChanged(RenderFragment renderFragment)
+    {
+        DrawerContent = renderFragment;
+
         StateHasChanged();
     }
 
     public void Dispose()
     {
         NavigationManager.LocationChanged -= LocationChanged;
+        DrawerService.OnDrawerStateChanged -= DrawerStateChanged;
+        DrawerService.OnRenderFragmentChanged -= RenderFragmentChanged;
     }
 }

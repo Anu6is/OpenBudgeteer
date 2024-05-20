@@ -1,0 +1,17 @@
+@typeparam T where T : IFragment, new()
+@typeparam TData
+
+@implements IFragment
+
+<MudPaper Class="mud-drawer-background ml-4 my-12 align-self-center" Elevation="0" Square>
+    <MudFocusTrap>
+        @ChildComponent
+    </MudFocusTrap>
+</MudPaper>
+
+@code {
+    [Parameter] public Action<TData> CallbackMethod { get; set; } = null!;
+    [Parameter] public Dictionary<string, object>? Parameters { get; set; }
+
+    private RenderFragment ChildComponent => FragmentExtension.CreateRenderFragmentFrom<T, TData>(Parameters, CallbackMethod);
+}

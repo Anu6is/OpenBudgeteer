@@ -1,0 +1,36 @@
+﻿<MudPaper Class="mud-background align-self-end flex-grow-1" Elevation="0" MinHeight="200px;" MinWidth="250px;" MaxWidth="400px">
+    <MudPaper Class="mud-primary d-flex  pt-10" Elevation="5" Width="100%" MinHeight="250px;" Style="padding-left:6%; padding-right:6%">
+        <MudCarousel TData="RenderFragment" Class="flex-grow-1" ShowArrows="false" AutoCycleTime="TimeSpan.FromSeconds(30)"
+                     BulletsClass="white-text pt-4" ShowBullets="@(NetWorth is not null)">
+            <Condition Evaluation="@(Savings is not null)">
+                <Match>
+                    <MudCarouselItem>
+                        <BalanceCard Balance="@Savings" Currency="@Currency" Title="Available Balance: " />
+                    </MudCarouselItem>
+                </Match>
+            </Condition>
+            <Condition Evaluation="@(Loans is not null && Loans.LineOne + Loans.LineTwo > 0)">
+                <Match>
+                    <MudCarouselItem>
+                        <BalanceCard Balance="@Loans" Currency="@Currency" Title="Payable Balance: " />
+                    </MudCarouselItem>
+                </Match>
+            </Condition>
+            <Condition Evaluation="@(NetWorth is not null)">
+                <Match>
+                    <MudCarouselItem>
+                        <BalanceCard Balance="@NetWorth" Currency="@Currency" Title="Net Worth: " />
+                    </MudCarouselItem>
+                </Match>
+            </Condition>
+        </MudCarousel>
+    </MudPaper>
+</MudPaper>
+
+@code {
+    [EditorRequired][Parameter] public required Currency Currency { get; set; }
+
+    [Parameter] public BalanceModel? Savings { get; set; }
+    [Parameter] public BalanceModel? Loans { get; set; }
+    [Parameter] public BalanceModel? NetWorth { get; set; }
+}
