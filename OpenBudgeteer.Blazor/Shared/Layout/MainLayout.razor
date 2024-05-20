@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 @inject DrawerService DrawerService
 
-<MudThemeProvider />
+<MudThemeProvider @bind-IsDarkMode="@_preferences.DarkMode" Theme="@CustomTheme" />
 <MudDialogProvider />
 <MudPopoverProvider />
 <MudSnackbarProvider />
@@ -20,8 +20,8 @@
 
     <Condition Evaluation="@DrawerService.DrawerOpen">
         <Match>
-            <MudDrawer Class="d-flex pr-4" Open="true" Elevation="5" PreserveOpenState="true" Width="25vw" 
-                       Style="min-width:280px;" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Right" 
+            <MudDrawer Class="d-flex pr-4" Open Overlay="false" Elevation="5" Width="25vw"
+                       Style="min-width:425px;" ClipMode="DrawerClipMode.Always" Anchor="Anchor.Right" 
                        Variant="@DrawerVariant.Temporary" Fixed>
                 <MudDrawerHeader Class="justify-center" Dense>
                     <MudText Typo="Typo.h6">@DrawerTitle</MudText>
@@ -30,10 +30,11 @@
                 <MudSpacer />
                 <MudButton Class="my-8" Color="Color.Inherit" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Close"
                            Style="width:fit-content; min-height:25px; align-self:center;"
-                           OnClick="@(() => DrawerService.ToggleDrawer(string.Empty))">
+                           OnClick="@(() => DrawerService.ToggleDrawer())">
                     Close
                 </MudButton>
             </MudDrawer>
+            <MudOverlay Visible DarkBackground="true" LockScroll="false" />
         </Match>
     </Condition>
     
@@ -72,13 +73,31 @@
 </MudLayout>
 
 @code {
-    private Preferences _preferences = new();
     private RenderFragment? DrawerContent { get; set; }
+
+    private Preferences _preferences = new();
+    private ErrorBoundary? _errorBoundary;
+
     private string? DrawerTitle { get; set; }
     private bool ShowOverlay { get; set; }
     private string MenuItem { get; set; } = "";
 
-    private ErrorBoundary? _errorBoundary;
+    public MudTheme CustomTheme => new()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = Colors.Teal.Default,
+            AppbarBackground = Colors.Teal.Default,
+            Surface = Colors.Teal.Lighten5,
+            Secondary = Colors.Teal.Lighten3
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Teal.Default,
+            AppbarBackground = Colors.Teal.Default,
+            Secondary = Colors.Teal.Darken2
+        }
+    };
 
     protected override void OnParametersSet()
     {
@@ -111,7 +130,10 @@
 
     private void LocationChanged(object? sender, LocationChangedEventArgs args)
     {
+        if (DrawerService.DrawerOpen) DrawerService.ToggleDrawer();
+
         MenuItem = NavigationManager.ToBaseRelativePath(args.Location);
+
         StateHasChanged();
     }
 
