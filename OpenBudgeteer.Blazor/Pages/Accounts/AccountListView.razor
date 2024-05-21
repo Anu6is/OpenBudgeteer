@@ -27,10 +27,10 @@
                                 <Match>
                                     <MudHidden Breakpoint="Breakpoint.SmAndDown">
                                         <MudSpacer />
-                                        <MudText Class="mr-n2 header-text" Inline="true" Typo="Typo.h6">
+                                        <MudText Class="mr-n2 header-text" HtmlTag="span" Typo="Typo.h6">
                                             @context.Accounts.Sum(x => (decimal)x.Balance).ToString("C", _customCulture)
                                         </MudText>
-                                        <MudText Class="mr-4 align-self-end" Inline="true" Typo="Typo.caption">
+                                        <MudText Class="mr-4 align-self-end" HtmlTag="span" Typo="Typo.caption">
                                             @context.Accounts.First().Currency!.IsoCode
                                         </MudText>
                                     </MudHidden>
@@ -49,12 +49,12 @@
                                         <MudIcon Size="Size.Small" />
                                     </NotMatch>
                                 </Condition>
-                                <MudText Class="pl-4" Inline="true" Typo="Typo.subtitle1">@(string.IsNullOrEmpty(account.Alias) ? account.Name : account.Alias)</MudText>
+                                <MudText Class="pl-4" HtmlTag="span" Typo="Typo.subtitle1">@(string.IsNullOrEmpty(account.Alias) ? account.Name : account.Alias)</MudText>
                                 <MudSpacer />
                                 <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="0">
-                                    <MudText Inline="true" Typo="Typo.subtitle1">@(((decimal)account.Balance).ToString("C", _customCulture))</MudText>
+                                    <MudText HtmlTag="span" Typo="Typo.subtitle1">@(((decimal)account.Balance).ToString("C", _customCulture))</MudText>
                                     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                                        <MudText Class="pl-1 pt-1" Inline="true" Typo="Typo.caption">@account.Currency!.IsoCode</MudText>
+                                        <MudText Class="pl-1 pt-1" HtmlTag="span" Typo="Typo.caption">@account.Currency!.IsoCode</MudText>
                                     </MudHidden>
                                     <MudMenu Class="align-self-end mr-n3" Icon="@Icons.Material.Filled.MoreVert" Dense="true"
                                                 AnchorOrigin="Origin.CenterLeft" TransformOrigin="Origin.TopRight">

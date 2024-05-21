@@ -3,10 +3,10 @@
 
 <MudStack Spacing="4">
     <MudStack Class="d-flex flex-wrap" Row="true" Spacing="1">
-        <MudText Class="white-text" Style="font-weight:600" Typo="Typo.h6" Inline="true">@Title</MudText>
+        <MudText Class="white-text" Style="font-weight:600" Typo="Typo.h6" HtmlTag="span">@Title</MudText>
         <MudSpacer />
-        <MudText Class="white-text" Style="font-weight:500" Typo="Typo.h6" Inline="true">@Balance.DisplayTotal().ToString("C", _customCulture)</MudText>
-        <MudText Class="white-text align-self-center pt-1" Style="font-weight:600" Typo="Typo.caption" Inline="true">@Currency.IsoCode</MudText>
+        <MudText Class="white-text" Style="font-weight:500" Typo="Typo.h6" HtmlTag="span">@Balance.DisplayTotal().ToString("C", _customCulture)</MudText>
+        <MudText Class="white-text align-self-center pt-1" Style="font-weight:600" Typo="Typo.caption" HtmlTag="span">@Currency.IsoCode</MudText>
     </MudStack>
     <MudProgressLinear Color="Color.Secondary" Size="Size.Large" Rounded="true" Max="@Balance.Max()" Value="@Balance.Value()" />
     <MudStack Class="px-2" Row="true" Justify="Justify.SpaceBetween">
