@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MudBlazor;
 using MudBlazor.Services;
 using OpenBudgeteer.Blazor;
 using OpenBudgeteer.Blazor.Services;
@@ -31,7 +32,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 builder.Services.AddMetaData();
-builder.Services.AddMudServices();
+builder.Services.AddMudServices(config => config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.TopCenter);
 builder.Services.AddFileReaderService();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddHostedService<HostedDatabaseMigrator>();
