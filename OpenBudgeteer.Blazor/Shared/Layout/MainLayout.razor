@@ -47,25 +47,7 @@
                     </CascadingValue>
                 </ChildContent>
                 <ErrorContent Context="error">
-                    <MudStack Class="relative ma-8" AlignItems="AlignItems.Center" Justify="Justify.Center">
-                        <MudText Typo="Typo.h6">Oops... Looks like something went wrong!</MudText>
-                        <MudImage Src="./img/pair_programming.svg" Alt="@error.Message" @onclick="ToggleOverlay"
-                                    Fluid="true" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
-                        <MudText Typo="Typo.h6">Hang Tight! Our team is hard at work figuring this out...</MudText>
-                    </MudStack>
-                    <MudOverlay Absolute="true" DarkBackground="true" Visible="@ShowOverlay" OnClick="@ToggleOverlay">
-                        <MudCard Style="padding-left:180px; padding-top:24px">
-                            <MudCardHeader>
-                                <MudText Typo="Typo.h6">@error.Source</MudText>
-                            </MudCardHeader>
-                            <MudCardContent>
-                                <MudText Typo="Typo.body1">@error.Message</MudText>
-                            </MudCardContent>
-                            <MudCardActions>
-                                <MudText Typo="Typo.subtitle1">@error.TargetSite?.ToString()</MudText>
-                            </MudCardActions>
-                        </MudCard>
-                    </MudOverlay>
+                    <ErrorMessage Error="@error" />
                 </ErrorContent>
             </ErrorBoundary>
         </MudContainer>
@@ -79,7 +61,6 @@
     private ErrorBoundary? _errorBoundary;
 
     private string? DrawerTitle { get; set; }
-    private bool ShowOverlay { get; set; }
     private string MenuItem { get; set; } = "";
 
     public MudTheme CustomTheme => new()
@@ -123,10 +104,7 @@
     async Task ToggleThemeAsync(bool value) 
     {
         _preferences = await PreferenceManager.ModifyPreferencesAsync(x => x.DarkMode = value);
-
     }
-
-    private void ToggleOverlay() => ShowOverlay = !ShowOverlay;
 
     private void LocationChanged(object? sender, LocationChangedEventArgs args)
     {

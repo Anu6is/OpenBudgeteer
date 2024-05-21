@@ -1,0 +1,27 @@
+﻿<MudStack Class="relative ma-8" AlignItems="AlignItems.Center" Justify="Justify.Center">
+    <MudText Typo="Typo.h6">Oops... Looks like something went wrong!</MudText>
+    <MudImage Src="./img/pair_programming.svg" Alt="@Error?.Message" @onclick="ToggleOverlay"
+              Fluid="true" ObjectFit="ObjectFit.ScaleDown" ObjectPosition="ObjectPosition.Center" />
+    <MudText Typo="Typo.h6">Hang Tight! Our team is hard at work figuring this out...</MudText>
+</MudStack>
+<MudOverlay Absolute DarkBackground Visible="@ShowOverlay" OnClick="@ToggleOverlay">
+    <MudCard Class="fixed" Style="left:50%; top:50%; transform: translate(-50%, -50%); margin-left:120px; max-width:50%;">
+        <MudCardHeader Class="justify-center">
+            <MudText Typo="Typo.h6">@Error?.Source</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText Align="Align.Center" Typo="Typo.body1">@Error?.Message</MudText>
+            <MudText Align="Align.Center" Typo="Typo.subtitle1">@Error?.StackTrace</MudText>
+        </MudCardContent>
+        <MudCardActions Class="justify-center">
+            <MudText Typo="Typo.subtitle1">@Error?.TargetSite?.ToString()</MudText>
+        </MudCardActions>
+    </MudCard>
+</MudOverlay>
+
+@code {
+    [EditorRequired][Parameter] public Exception? Error { get; set; }
+
+    private bool ShowOverlay { get; set; }
+    private void ToggleOverlay() => ShowOverlay = !ShowOverlay;
+}
