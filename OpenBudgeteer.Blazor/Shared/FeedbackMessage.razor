@@ -1,0 +1,14 @@
+﻿@inject ISnackbar Snackbar
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    public void SendNotification(AlertMessage alert) => Snackbar.Add(alert.Message, alert.Severity);
+
+    public record AlertMessage(Severity Severity, string Message);
+}

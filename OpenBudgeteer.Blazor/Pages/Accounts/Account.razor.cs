@@ -9,6 +9,7 @@ using OpenBudgeteer.Core.ViewModels.Helper;
 using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 using System.Collections.Generic;
 using System.Linq;
+using static OpenBudgeteer.Blazor.Shared.FeedbackMessage;
 
 namespace OpenBudgeteer.Blazor.Pages.Accounts;
 
@@ -56,6 +57,8 @@ public partial class Account : ComponentBase
         DrawerService.ToggleDrawer();
 
         _selectedCurrency = model.Currency;
+
+        Feedback?.SendNotification(new AlertMessage(Severity.Success, $"{model.AccountType} account successfully created"));
     }
 
     private void EditAccount(AccountDetailViewModel account)
@@ -82,7 +85,7 @@ public partial class Account : ComponentBase
     {
         if (!result.IsSuccessful)
         {
-            //TODO - show result.Message;
+            Feedback?.SendNotification(new AlertMessage(Severity.Error, result.Message));
         }
 
         if (!result.ViewModelReloadRequired) return;
@@ -93,7 +96,8 @@ public partial class Account : ComponentBase
 
         if (!result.IsSuccessful)
         {
-            //TODO - show result.Message
+            Feedback?.SendNotification(new AlertMessage(Severity.Error, result.Message));
+
             return;
         }
 

@@ -46,3 +46,8 @@
         </MudContainer>
     </Match>
 </Condition>
+
+@code {
+    [CascadingParameter]
+    public FeedbackMessage? Feedback { get; set; }
+}
