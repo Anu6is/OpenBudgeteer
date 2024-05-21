@@ -26,9 +26,6 @@ public partial class Rules : ComponentBase
     private bool _isDeleteRuleSetDialogVisible;
     private RuleSetViewModel? _ruleSetToBeDeleted;
 
-    private bool _isErrorModalDialogVisible;
-    private string _errorModalDialogMessage = string.Empty;
-
     protected override async Task OnInitializedAsync()
     {
         _dataContext = new RulesPageViewModel(ServiceManager);
@@ -123,8 +120,7 @@ public partial class Rules : ComponentBase
     {
         if (!result.IsSuccessful)
         {
-            _errorModalDialogMessage = result.Message;
-            _isErrorModalDialogVisible = true;
+            //TODO - show error
         }
         if (result.ViewModelReloadRequired)
         {

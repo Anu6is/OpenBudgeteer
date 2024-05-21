@@ -451,9 +451,3 @@
     IsDialogVisible="@_isDeleteConfirmationDialogVisible"
     OnDeleteClickCallback="@DeleteProfile"
     OnCancelClickCallback="@(() => _isDeleteConfirmationDialogVisible = false)"/>
-
-<ErrorMessageDialog 
-    Title="Import" 
-    Message="@_errorModalDialogMessage" 
-    IsDialogVisible="@_isErrorModalDialogVisible"
-    OnClickCallback="@(() => _isErrorModalDialogVisible = false)"/>

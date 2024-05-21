@@ -116,12 +116,6 @@
     OnDeleteClickCallback="DeleteTransaction"
     OnCancelClickCallback="CancelDeleteTransaction"/>
 
-<ErrorMessageDialog 
-    Title="Transaction" 
-    Message="@_errorModalDialogMessage" 
-    IsDialogVisible="@_isErrorModalDialogVisible"
-    OnClickCallback="@(() => _isErrorModalDialogVisible = false)"/>
-
 @code {
     [Parameter]
     public RecurringTransactionHandlerViewModel DataContext { get; set; } = null!;
@@ -136,9 +130,6 @@
 
     bool _isDeleteTransactionModalDialogVisible;
     RecurringTransactionViewModel? _transactionToBeDeleted;
-
-    bool _isErrorModalDialogVisible;
-    string _errorModalDialogMessage = string.Empty;
 
     void EditAllTransaction()
     {
@@ -206,8 +197,7 @@
     {
         if (!result.IsSuccessful)
         {
-            _errorModalDialogMessage = result.Message;
-            _isErrorModalDialogVisible = true;
+            //TODO - show error
         }
         if (result.ViewModelReloadRequired)
         {

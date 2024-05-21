@@ -31,9 +31,6 @@ public partial class Transaction : ComponentBase
     private bool _isDeleteTransactionDialogVisible;
     private TransactionViewModel? _transactionToBeDeleted;
 
-    private bool _isErrorModalDialogVisible;
-    private string _errorModalDialogMessage = string.Empty;
-
     private bool _isProposeBucketsInfoDialogVisible;
 
     protected override async Task OnInitializedAsync()
@@ -170,8 +167,7 @@ public partial class Transaction : ComponentBase
     {
         if (!result.IsSuccessful)
         {
-            _errorModalDialogMessage = result.Message;
-            _isErrorModalDialogVisible = true;
+            //TODO - show error
         }
         if (result.ViewModelReloadRequired)
         {

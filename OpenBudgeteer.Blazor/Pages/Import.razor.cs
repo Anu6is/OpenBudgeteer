@@ -52,9 +52,6 @@ public partial class Import : ComponentBase
 
     private bool _isDeleteConfirmationDialogVisible;
 
-    private bool _isErrorModalDialogVisible;
-    private string _errorModalDialogMessage = string.Empty;
-
     protected override void OnInitialized()
     {
         _dataContext = new ImportPageViewModel(ServiceManager);
@@ -284,8 +281,7 @@ public partial class Import : ComponentBase
     {
         if (!result.IsSuccessful)
         {
-            _errorModalDialogMessage = result.Message;
-            _isErrorModalDialogVisible = true;
+            //TODO - show error
             return;
         }
         if (string.IsNullOrEmpty(successMessage)) return;

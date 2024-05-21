@@ -32,10 +32,6 @@ public partial class Bucket : ComponentBase
     private bool _isCloseBucketDialogVisible;
     private BucketViewModel? _bucketToBeClosed;
 
-    private bool _isErrorModalDialogVisible;
-    private string _errorModalDialogMessage = string.Empty;
-    private bool _hasErrorInBucketModalDialog;
-
     protected override async Task OnInitializedAsync()
     {
         _dataContext = new BucketPageViewModel(ServiceManager, YearMonthDataContext);
@@ -110,7 +106,7 @@ public partial class Bucket : ComponentBase
         await HandleResult(result);
         if (!result.IsSuccessful)
         {
-            _hasErrorInBucketModalDialog = true; // Ensures that Dialog will be displayed again
+            //TODO - show error
             return; // Error message is shown in HandleResult()
         }
         StateHasChanged();
@@ -146,8 +142,7 @@ public partial class Bucket : ComponentBase
     {
         if (!result.IsSuccessful)
         {
-            _errorModalDialogMessage = result.Message;
-            _isErrorModalDialogVisible = true;
+            //TODO - show message
         }
         if (result.ViewModelReloadRequired)
         {
@@ -181,16 +176,5 @@ public partial class Bucket : ComponentBase
 
         _isBucketDetailsModalDialogDataContextLoading = false;
         StateHasChanged();
-    }
-
-    private void CloseErrorDialog()
-    {
-        _isErrorModalDialogVisible = false;
-        // In case error occuring in EditBucketDialog, display it again
-        if (_hasErrorInBucketModalDialog)
-        {
-            _isEditBucketModalDialogVisible = true;
-            _hasErrorInBucketModalDialog = false;
-        }
     }
 }
