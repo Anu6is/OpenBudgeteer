@@ -1,11 +1,18 @@
 ﻿@implements IFragment
 @inject CurrencyProvider CurrencyProvider
 
-<MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success" ValidationDelay="0" Spacing="5">
-    <MudTextField T="string" @bind-Value="_model.Title" For="@(() => _model.Title!)" Immediate="true" Margin="Margin.Dense"
-                  Placeholder="New Account" Required="true" RequiredError="Title is required!" HelperTextOnFocus="true"
+<MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success" ValidationDelay="0" Spacing="4">
+    <Condition Evaluation="@(_model.AccountType == AccountType.Deposit)">
+        <Match>
+            <MudTextField T="string" @bind-Value="_model.Alias" For="@(() => _model.Alias!)" Label="Institution" Placeholder="Bank Name"
+                          Margin="Margin.Dense" Immediate Required RequiredError="Title is required!" MaxLength="15" 
+                          HelperTextOnFocus HelperText="Max. 15 characters" />
+        </Match>
+    </Condition>
+    <MudTextField T="string" @bind-Value="_model.Title" For="@(() => _model.Title!)" Immediate Margin="Margin.Dense"
+                  Placeholder="New Account" Required RequiredError="Title is required!" HelperTextOnFocus
                   MaxLength="15" HelperText="Max. 15 characters" />
-    <MudStack Class="pb-8" Row="true" Justify="Justify.SpaceBetween">
+    <MudStack Row="true" Justify="Justify.SpaceBetween">
         <MudTextField T="decimal?" @bind-Value="_model.Balance" For="@(() => _model.Balance)" Immediate="true" Margin="Margin.Dense"
                       Required="true" RequiredError="Amount is required!" />
         <MudSelect OuterClass="mt-2" T="Currency" @bind-Value="_model.Currency" For="@(() => _model.Currency!)" Immediate="true" Style="width:120px;"
@@ -15,7 +22,13 @@
             </Iteration>
         </MudSelect>
     </MudStack>
-    <MudStack Row="true" Class="pt-8" Justify="Justify.FlexEnd">
+    <MudStack Row="true" Class="pt-4" Justify="Justify.FlexEnd">
+        <Condition Evaluation="@(_model.AccountType == AccountType.Deposit)">
+            <Match>
+                <MudSwitch @bind-Value="_model.SubType" Color="Color.Primary" Converter="@(new SubTypeConverter(AccountType))">@_model.SubType</MudSwitch>
+                <MudSpacer />
+            </Match>
+        </Condition>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!_success)" OnClick="@Submit">Create</MudButton>
     </MudStack>
 </MudForm>

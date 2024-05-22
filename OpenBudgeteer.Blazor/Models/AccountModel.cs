@@ -6,7 +6,7 @@ namespace OpenBudgeteer.Blazor.Models;
 
 public sealed class AccountModel
 {
-    [Required, Label("Name")] public string Title { get; set; } = null!;
+    [Required, Label("Account Name")] public string Title { get; set; } = null!;
     [Label("Currency")] public Currency Currency { get; set; } = null!;
     [Label("Balance")] public decimal? Balance { get; set; } = 0;
     public string? Alias { get; set; }

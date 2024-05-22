@@ -21,7 +21,7 @@
                 <MudExpansionPanel Expanded="@ExpandedPanels.Contains(context.DisplayName)" ExpandedChanged="@((isExpanded) => Expanded(context.DisplayName, isExpanded))">
                     <TitleContent>
                         <MudStack Row="true" Class="d-flex flex-wrap">
-                            <MudIcon Icon="@context.Icon" class="mr-3"></MudIcon>
+                            <MudIcon Icon="@context.Icon" class="mr-2"></MudIcon>
                             <MudText Class="header-text" Typo="Typo.h6">@context.DisplayName</MudText>
                             <Condition Evaluation="@(ExpandedPanels.Contains(context.DisplayName) is false)">
                                 <Match>
@@ -40,27 +40,41 @@
                     </TitleContent>
                     <ChildContent>
                         <Iteration Items="@context.Accounts" Context="account">
-                            <MudStack Row="true" Class="d-flex flex-wrap" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd">
-                                <Condition Evaluation="@(!account.IsActive)">
-                                    <Match>
-                                        <MudIcon Icon="@Icons.Material.Filled.DisabledVisible" Size="Size.Small" />
-                                    </Match>
-                                    <NotMatch>
-                                        <MudIcon Size="Size.Small" />
-                                    </NotMatch>
-                                </Condition>
-                                <MudText Class="pl-4" HtmlTag="span" Typo="Typo.subtitle1">@(string.IsNullOrEmpty(account.Alias) ? account.Name : account.Alias)</MudText>
-                                <MudSpacer />
-                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.FlexEnd" Spacing="0">
-                                    <MudText HtmlTag="span" Typo="Typo.subtitle1">@(((decimal)account.Balance).ToString("C", _customCulture))</MudText>
-                                    <MudHidden Breakpoint="Breakpoint.SmAndDown">
-                                        <MudText Class="pl-1 pt-1" HtmlTag="span" Typo="Typo.caption">@account.Currency!.IsoCode</MudText>
-                                    </MudHidden>
-                                    <MudMenu Class="align-self-end mr-n3" Icon="@Icons.Material.Filled.MoreVert" Dense="true"
-                                                AnchorOrigin="Origin.CenterLeft" TransformOrigin="Origin.TopRight">
-                                        <MudMenuItem Icon="@Icons.Material.Filled.Edit" IconSize="Size.Small" OnClick="@(() => EditAccount(account))">Edit</MudMenuItem>
-                                        <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Small" IconColor="Color.Error" OnClick="@(() => DeleteAccount(account))">Delete</MudMenuItem>
-                                    </MudMenu>
+                            <MudStack Row Class="flex-wrap flex-grow-1" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                <MudStack Row Class="flex-grow-1" AlignItems="AlignItems.Center" Style="min-width:225px;">
+                                    <Condition Evaluation="@(!account.IsActive)">
+                                        <Match>
+                                            <MudIcon Icon="@Icons.Material.Filled.DisabledVisible" Size="Size.Small" />
+                                        </Match>
+                                        <NotMatch>
+                                            <Condition Evaluation="@(string.IsNullOrEmpty(account.Alias))">
+                                                <Match>
+                                                    <MudIcon Size="Size.Small" />
+                                                </Match>
+                                                <NotMatch>
+                                                    <MudTooltip Text="@account.Alias">
+                                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@account.Alias![0]</MudAvatar>
+                                                    </MudTooltip>
+                                                </NotMatch>
+                                            </Condition>
+                                        </NotMatch>
+                                    </Condition>
+                                    <MudTooltip Text="@account.SubType">
+                                        <MudText Class="pl-4" HtmlTag="span" Typo="Typo.subtitle1">@account.Name</MudText>
+                                    </MudTooltip>
+                                </MudStack>
+                                <MudStack Row Class="flex-grow-1" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.Start">
+                                    <MudBreakpointProvider OnBreakpointChanged="@SetJustify">
+                                        <MudStack Row AlignItems="AlignItems.Center" Justify="@JustifyStartOrEnd" Spacing="0">
+                                            <MudText Class="pl-12" HtmlTag="span" Typo="Typo.subtitle1">@(((decimal)account.Balance).ToString("C", _customCulture))</MudText>
+                                            <MudText Class="pl-1 pt-1" HtmlTag="span" Typo="Typo.caption">@account.Currency!.IsoCode</MudText>
+                                        </MudStack>
+                                        <MudMenu Class="align-self-end mr-n3" Icon="@Icons.Material.Filled.MoreVert" Dense="true"
+                                                 AnchorOrigin="Origin.CenterLeft" TransformOrigin="Origin.TopRight">
+                                            <MudMenuItem Icon="@Icons.Material.Filled.Edit" IconSize="Size.Small" OnClick="@(() => EditAccount(account))">Edit</MudMenuItem>
+                                            <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Small" IconColor="Color.Error" OnClick="@(() => DeleteAccount(account))">Delete</MudMenuItem>
+                                        </MudMenu>
+                                    </MudBreakpointProvider>
                                 </MudStack>
                             </MudStack>
                         </Iteration>
@@ -77,6 +91,7 @@
 </Condition>
 
 @code {
+    private Justify JustifyStartOrEnd = Justify.FlexEnd;
     private string DefaultCurrency => CurrencyProvider.DefaultCurrency.IsoCode;
 
     [CascadingParameter] Guid OwnerId { get; set; }
@@ -139,6 +154,15 @@
                 CurrencySymbol = SelectedCurrency!.Symbol,
                 CurrencyDecimalDigits = 0
             }
+        };
+    }
+
+    private void SetJustify(Breakpoint breakpoint)
+    {
+        JustifyStartOrEnd = breakpoint switch
+        {
+            Breakpoint.Xs => Justify.FlexStart, 
+            _ => Justify.FlexEnd
         };
     }
 
