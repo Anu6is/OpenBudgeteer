@@ -73,6 +73,16 @@
                                         </MudStack>
                                         <MudMenu Class="align-self-end mr-n3" Icon="@Icons.Material.Filled.MoreVert" Dense="true"
                                                  AnchorOrigin="Origin.CenterLeft" TransformOrigin="Origin.TopRight">
+                                            <Condition Evaluation="@(account.AccountType == AccountType.Deposit)">
+                                                <Match>
+                                                    <MudMenuItem Icon="@Icons.Material.Filled.SwapHoriz" IconSize="Size.Small" OnClick="@(() => AccountTransfer(account))">Transfer</MudMenuItem>
+                                                </Match>
+                                            </Condition>
+                                            <Condition Evaluation="@(account.AccountType == AccountType.Credit)">
+                                                <Match>
+                                                    <MudMenuItem Icon="@Icons.Material.Filled.Payments" IconSize="Size.Small" OnClick="@(() => AccountPayment(account))">Pay</MudMenuItem>
+                                                </Match>
+                                            </Condition>
                                             <MudMenuItem Icon="@Icons.Material.Filled.Edit" IconSize="Size.Small" OnClick="@(() => EditAccount(account))">Edit</MudMenuItem>
                                             <MudMenuItem Icon="@Icons.Material.Filled.Delete" IconSize="Size.Small" IconColor="Color.Error" OnClick="@(() => DeleteAccount(account))">Delete</MudMenuItem>
                                         </MudMenu>
@@ -170,6 +180,8 @@
 
     private bool ShowBadge(AccountDetailViewModel accountDetail)
     {
+        if (accountDetail.AccountType != AccountType.Credit) return false;
+
         var currentDate = DateTime.Now.Date;
         var statementDate = new DateTime(currentDate.Year, currentDate.Month, accountDetail.EffectiveDate!.Value.Day);
 
@@ -178,6 +190,8 @@
 
     private Color GetStatusColor(AccountDetailViewModel accountDetail)
     {
+        if (accountDetail.AccountType != AccountType.Credit) return Color.Default;
+
         var currentDate = DateTime.Now.Date;
         var statementDate = new DateTime(currentDate.Year, currentDate.Month, accountDetail.EffectiveDate!.Value.Day);
 
@@ -202,6 +216,16 @@
 
         if (CurrencyAccounts.Length > 0)
             SelectedCurrency = CurrencyAccounts[0].Accounts[0].Currency;
+    }
+
+    private void AccountTransfer(AccountDetailViewModel account)
+    {
+        //TODO - account transfer
+    }
+
+    private void AccountPayment(AccountDetailViewModel account)
+    {
+        //TODO - account payment
     }
 
     private async Task DeleteAccount(AccountDetailViewModel account)
