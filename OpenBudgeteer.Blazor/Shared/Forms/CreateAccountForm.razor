@@ -2,7 +2,7 @@
 @inject CurrencyProvider CurrencyProvider
 
 <MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success" ValidationDelay="0" Spacing="4">
-    <Condition Evaluation="@(_model.AccountType == AccountType.Deposit)">
+    <Condition Evaluation="@(_model.AccountType == AccountType.Deposit || _model.AccountType == AccountType.Credit)">
         <Match>
             <MudTextField T="string" @bind-Value="_model.Alias" For="@(() => _model.Alias!)" Label="Institution" Placeholder="Bank Name"
                           Margin="Margin.Dense" Immediate Required RequiredError="Title is required!" MaxLength="15" 
@@ -22,8 +22,13 @@
             </Iteration>
         </MudSelect>
     </MudStack>
+    <Condition Evaluation="@(_model.AccountType == AccountType.Credit)">
+        <Match>
+            <MudDatePicker @bind-Date="_model.EffectiveDate" For="@(() => _model.EffectiveDate)" Required RequiredError="Statement date is required!" Margin="Margin.Dense" />
+        </Match>
+    </Condition>
     <MudStack Row="true" Class="pt-4" Justify="Justify.FlexEnd">
-        <Condition Evaluation="@(_model.AccountType == AccountType.Deposit)">
+        <Condition Evaluation="@(_model.AccountType != AccountType.Cash && _model.AccountType != AccountType.Investment)">
             <Match>
                 <MudSwitch @bind-Value="_model.SubType" Color="Color.Primary" Converter="@(new SubTypeConverter(AccountType))">@_model.SubType</MudSwitch>
                 <MudSpacer />

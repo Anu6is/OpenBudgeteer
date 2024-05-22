@@ -1,5 +1,6 @@
 ﻿using MudBlazor;
 using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace OpenBudgeteer.Blazor.Models;
@@ -11,5 +12,6 @@ public sealed class AccountModel
     [Label("Balance")] public decimal? Balance { get; set; } = 0;
     public string? Alias { get; set; }
     public string? SubType { get; set; }
+    public DateTime? EffectiveDate { get; set; }
     public AccountType AccountType { get; set; }
 }

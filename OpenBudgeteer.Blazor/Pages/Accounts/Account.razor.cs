@@ -49,6 +49,7 @@ public partial class Account : ComponentBase
             Currency = model.Currency,
             Balance = model.Balance ?? 0,
             AccountType = model.AccountType,
+            EffectiveDate = model.EffectiveDate,
             SubType = model.SubType,
         };
 

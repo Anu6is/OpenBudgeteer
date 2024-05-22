@@ -16,16 +16,19 @@ public class AccountManager(ExtendedServiceManager serviceManager)
             accountDetails.AccountId = account.Id;
             serviceManager.AccountDetailService.Create(accountDetails);
 
-            var initialBalance = new BankTransaction
+            if (accountDetailModel.Balance != 0)
             {
-                Id = Guid.Empty,
-                TransactionDate = DateTime.UtcNow.Date.Subtract(TimeSpan.FromDays(1)),
-                AccountId = account.Id,
-                Memo = "Initial Balance",
-                Amount = accountDetailModel.Balance
-            };
+                var initialBalance = new BankTransaction
+                {
+                    Id = Guid.Empty,
+                    TransactionDate = DateTime.UtcNow.Date.Subtract(TimeSpan.FromDays(1)),
+                    AccountId = account.Id,
+                    Memo = "Initial Balance",
+                    Amount = accountDetailModel.Balance
+                };
 
-            serviceManager.BankTransactionService.Create(initialBalance);
+                serviceManager.BankTransactionService.Create(initialBalance);
+            }
 
             return new ViewModelOperationResult(true, true);
         }

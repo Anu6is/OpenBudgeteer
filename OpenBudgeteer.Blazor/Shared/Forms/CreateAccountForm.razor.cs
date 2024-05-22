@@ -23,6 +23,7 @@ public partial class CreateAccountForm : ComponentBase
             return _accountType switch
             {
                 AccountType.Deposit => value is true ? SubType.Deposit.Checking : SubType.Deposit.Savings,
+                AccountType.Credit => value is true ? SubType.Credit.Mastercard : SubType.Credit.Visa,
                 _ => null
             };
         }

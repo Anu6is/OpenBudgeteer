@@ -15,6 +15,8 @@ public class AccountDetailViewModel : AccountViewModel
 
     public string? SubType { get; set; }
 
+    public DateTime? EffectiveDate { get; set; }
+
     public ICollection<BudgetUser> Owners { get; set; } = [];
 
     public AccountDetailViewModel() : this(null, null) { }
@@ -27,6 +29,7 @@ public class AccountDetailViewModel : AccountViewModel
         SubType = accountDetail.SubType;
         Currency = accountDetail.Currency;
         AccountType = accountDetail.AccountType;
+        EffectiveDate = accountDetail.EffectiveDate;
     }
 
     protected AccountDetailViewModel(AccountDetailViewModel viewModel) : base(viewModel)
@@ -36,6 +39,7 @@ public class AccountDetailViewModel : AccountViewModel
         Balance = viewModel.Balance;
         Currency = viewModel.Currency;
         AccountType = viewModel.AccountType;
+        EffectiveDate = viewModel.EffectiveDate;
     }
 
     public Account ToAccount()
@@ -56,7 +60,8 @@ public class AccountDetailViewModel : AccountViewModel
             SubType = SubType,
             Currency = Currency!,
             AccountId = AccountId,
-            AccountType = AccountType
+            AccountType = AccountType,
+            EffectiveDate = EffectiveDate
         };
     }
 }

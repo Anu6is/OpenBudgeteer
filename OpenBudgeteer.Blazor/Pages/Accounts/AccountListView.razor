@@ -53,7 +53,9 @@
                                                 </Match>
                                                 <NotMatch>
                                                     <MudTooltip Text="@account.Alias">
-                                                        <MudAvatar Color="Color.Primary" Size="Size.Small">@account.Alias![0]</MudAvatar>
+                                                        <MudBadge Color="@GetStatusColor(account)" Visible="@ShowBadge(account)" Dot>
+                                                            <MudAvatar Color="Color.Primary" Size="Size.Small">@account.Alias!.ToUpper()[0]</MudAvatar>
+                                                        </MudBadge>
                                                     </MudTooltip>
                                                 </NotMatch>
                                             </Condition>
@@ -164,6 +166,28 @@
             Breakpoint.Xs => Justify.FlexStart, 
             _ => Justify.FlexEnd
         };
+    }
+
+    private bool ShowBadge(AccountDetailViewModel accountDetail)
+    {
+        var currentDate = DateTime.Now.Date;
+        var statementDate = new DateTime(currentDate.Year, currentDate.Month, accountDetail.EffectiveDate!.Value.Day);
+
+        return statementDate >= currentDate; //TODO - check if transactions before effective date are paid
+    }
+
+    private Color GetStatusColor(AccountDetailViewModel accountDetail)
+    {
+        var currentDate = DateTime.Now.Date;
+        var statementDate = new DateTime(currentDate.Year, currentDate.Month, accountDetail.EffectiveDate!.Value.Day);
+
+        if (statementDate < currentDate) return Color.Default;
+
+        if (statementDate >= currentDate.Subtract(TimeSpan.FromDays(5))) return Color.Info;
+
+        if (statementDate.AddDays(25) >= currentDate.Subtract(TimeSpan.FromDays(5))) return Color.Warning;
+
+        return Color.Error;
     }
 
     private void Expanded(string key, bool isExpanded) => _ = isExpanded ? ExpandedPanels.Add(key) : ExpandedPanels.Remove(key);

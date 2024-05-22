@@ -23,6 +23,7 @@ public class AccountDetail : IEntity
     public string? Alias { get; set; }
 
     public string? SubType { get; set; }
+    public DateTime? EffectiveDate { get; set; }
 
     public Account Account { get; set; } = null!;
 
