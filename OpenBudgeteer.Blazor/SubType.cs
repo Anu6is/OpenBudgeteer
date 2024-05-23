@@ -22,8 +22,9 @@ public class SubType
 
     public static class Investment
     {
-        public const string Brokerage = "Brokerage";
+        public const string Annuity = "Annuity";
         public const string Pension = "Pension";
+        public const string Brokerage = "Brokerage";
         public const string Retirement = "Retirement";
         public const string MutualFund = "Mutual Fund";
 

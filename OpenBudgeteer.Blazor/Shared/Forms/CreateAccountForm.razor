@@ -2,9 +2,9 @@
 @inject CurrencyProvider CurrencyProvider
 
 <MudForm Model="@_model" @ref="@_form" @bind-IsValid="@_success" ValidationDelay="0" Spacing="4">
-    <Condition Evaluation="@(_model.AccountType == AccountType.Deposit || _model.AccountType == AccountType.Credit)">
+    <Condition Evaluation="@ManagedByInstitution">
         <Match>
-            <MudTextField T="string" @bind-Value="_model.Alias" For="@(() => _model.Alias!)" Label="Institution" Placeholder="Bank Name"
+            <MudTextField T="string" @bind-Value="_model.Alias" For="@(() => _model.Alias!)" Label="Institution" Placeholder="Name of Institution"
                           Margin="Margin.Dense" Immediate Required RequiredError="Title is required!" MaxLength="15" 
                           HelperTextOnFocus HelperText="Max. 15 characters" />
         </Match>
@@ -15,8 +15,8 @@
     <MudStack Row="true" Justify="Justify.SpaceBetween">
         <MudTextField T="decimal?" @bind-Value="_model.Balance" For="@(() => _model.Balance)" Immediate="true" Margin="Margin.Dense"
                       Required="true" RequiredError="Amount is required!" />
-        <MudSelect OuterClass="mt-2" T="Currency" @bind-Value="_model.Currency" For="@(() => _model.Currency!)" Immediate="true" Style="width:120px;"
-                   Margin="Margin.Dense" Dense="true" Variant="Variant.Outlined" Required="true" RequiredError="Currency is required!">
+        <MudSelect OuterClass="mt-2" T="Currency" @bind-Value="_model.Currency" For="@(() => _model.Currency!)" Immediate Style="width:120px;"
+                   Margin="Margin.Dense" Dense Variant="Variant.Outlined" Required="true" RequiredError="Currency is required!">
             <Iteration Items="@CurrencyProvider.Currencies" Context="currency">
                 <MudSelectItem Value="@currency">@currency.IsoCode</MudSelectItem>
             </Iteration>
@@ -27,8 +27,21 @@
             <MudDatePicker @bind-Date="_model.EffectiveDate" For="@(() => _model.EffectiveDate)" Required RequiredError="Statement date is required!" Margin="Margin.Dense" />
         </Match>
     </Condition>
+    <Condition Evaluation="@(_model.AccountType == AccountType.Investment)">
+        <Match>
+            <MudSelect OuterClass="mt-2" T="string" @bind-Value="_model.SubType" For="@(() => _model.SubType!)" Variant="Variant.Outlined"
+                       Margin="Margin.Dense" AnchorOrigin="Origin.BottomCenter" RequiredError="Investment type is required!"
+                       Dense Immediate Required Placeholder="Investment Type">
+                <MudSelectItem Value="@SubType.Investment.Annuity" />
+                <MudSelectItem Value="@SubType.Investment.Brokerage" />
+                <MudSelectItem Value="@SubType.Investment.MutualFund">Mutual Fund</MudSelectItem>
+                <MudSelectItem Value="@SubType.Investment.Pension" />
+                <MudSelectItem Value="@SubType.Investment.Retirement" />
+            </MudSelect>
+        </Match>
+    </Condition>
     <MudStack Row="true" Class="pt-4" Justify="Justify.FlexEnd">
-        <Condition Evaluation="@(_model.AccountType != AccountType.Cash && _model.AccountType != AccountType.Investment)">
+        <Condition Evaluation="@(_model.AccountType != AccountType.Investment && _model.AccountType != AccountType.Cash)">
             <Match>
                 <MudSwitch @bind-Value="_model.SubType" Color="Color.Primary" Converter="@(new SubTypeConverter(AccountType))">@_model.SubType</MudSwitch>
                 <MudSpacer />
@@ -42,6 +55,10 @@
     private bool _success;
     private MudForm? _form;
     private readonly AccountModel _model = new();
+
+    private bool ManagedByInstitution => _model.AccountType == AccountType.Credit
+                                      || _model.AccountType == AccountType.Deposit
+                                      || _model.AccountType == AccountType.Investment;
 
     [Parameter]
     public AccountType AccountType { get; set; }
