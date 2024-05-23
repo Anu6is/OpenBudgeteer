@@ -1,8 +1,9 @@
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using OpenBudgeteer.Blazor.Models;
 using OpenBudgeteer.Blazor.Services;
-using OpenBudgeteer.Blazor.Shared.Forms;
+using OpenBudgeteer.Blazor.Shared;
 using OpenBudgeteer.Core.Common;
 using OpenBudgeteer.Core.Data.Contracts.Services;
 using OpenBudgeteer.Core.ViewModels.Helper;
@@ -44,8 +45,8 @@ public partial class Account : ComponentBase
     {
         var account = new AccountDetailViewModel()
         {
-            Name = model.Title,
-            Alias = model.Alias,
+            Name = model.Title.Transform(To.TitleCase),
+            Alias = model.Alias.Transform(To.TitleCase),
             Currency = model.Currency,
             Balance = model.Balance ?? 0,
             AccountType = model.AccountType,

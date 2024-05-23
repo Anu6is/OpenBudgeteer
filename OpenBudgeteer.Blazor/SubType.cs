@@ -24,6 +24,7 @@ public class SubType
     {
         public const string Annuity = "Annuity";
         public const string Pension = "Pension";
+        public const string Property = "Property";
         public const string Brokerage = "Brokerage";
         public const string Retirement = "Retirement";
         public const string MutualFund = "Mutual Fund";
