@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OpenBudgeteer.Blazor.Models;
 
-public sealed class AccountModel
+public sealed class AccountDetailModel
 {
     [Required, Label("Account Name")] public string Title { get; set; } = null!;
     [Label("Currency")] public Currency Currency { get; set; } = null!;
@@ -14,4 +14,5 @@ public sealed class AccountModel
     public string? SubType { get; set; }
     public DateTime? EffectiveDate { get; set; }
     public AccountType AccountType { get; set; }
+    public Guid? AssociatedAccountId { get; set; }
 }

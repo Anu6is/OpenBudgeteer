@@ -1,4 +1,4 @@
-﻿namespace OpenBudgeteer.Blazor;
+﻿namespace OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
 public class SubType
 {

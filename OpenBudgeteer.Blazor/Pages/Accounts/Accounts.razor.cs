@@ -1,4 +1,3 @@
-using Humanizer;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using OpenBudgeteer.Blazor.Models;
@@ -14,7 +13,7 @@ using static OpenBudgeteer.Blazor.Shared.FeedbackMessage;
 
 namespace OpenBudgeteer.Blazor.Pages.Accounts;
 
-public partial class Account : ComponentBase
+public partial class Accounts : ComponentBase
 {
     [Inject] private IServiceManager ServiceManager { get; set; } = null!;
     [Inject] private AccountManager AccountManager { get; set; } = null!;
@@ -36,41 +35,43 @@ public partial class Account : ComponentBase
 
         HandleResult(_dataContext.LoadData());
 
+        RefreshAccountList();
+
         _initialized = true;
 
         base.OnInitialized();
     }
 
-    private void CreateNewAccount(AccountModel model)
+    private void CreateNewAccount(AccountDetailViewModel account)
     {
-        var account = new AccountDetailViewModel()
-        {
-            Name = model.Title.Transform(To.TitleCase),
-            Alias = model.Alias.Transform(To.TitleCase),
-            Currency = model.Currency,
-            Balance = model.Balance ?? 0,
-            AccountType = model.AccountType,
-            EffectiveDate = model.EffectiveDate,
-            SubType = model.SubType,
-        };
-
         HandleResult(AccountManager.CreateAccount(account));
 
         DrawerService.ToggleDrawer();
 
-        _selectedCurrency = model.Currency;
+        _selectedCurrency = account.Currency;
 
-        Feedback?.SendNotification(new AlertMessage(Severity.Success, $"{model.AccountType} account successfully created"));
+        Feedback?.SendNotification(new AlertMessage(Severity.Success, $"{account.AccountType} account successfully created"));
     }
 
     private void EditAccount(AccountDetailViewModel account)
     {
+        DrawerService.RenderFragment = FragmentExtension.CreateRenderFragmentFrom<FormComponent<AccountForm, AccountDetailViewModel>, AccountDetailViewModel>(SaveChanges,
+            new Dictionary<string, object>()
+            {
+                { "AccountDetailViewModel", account }
+            });
+
+        DrawerService.ToggleDrawer($"Edit {account.AccountType} Account");
     }
 
 
     private void SaveChanges(AccountDetailViewModel account)
     {
-        HandleResult(account.CreateOrUpdateAccount());
+        HandleResult(AccountManager.UpdateAccount(account));
+
+        DrawerService.ToggleDrawer();
+
+        Feedback?.SendNotification(new AlertMessage(Severity.Success, $"{account.AccountType} account successfully updated"));
     }
 
     private void CancelChanges()
@@ -92,9 +93,16 @@ public partial class Account : ComponentBase
 
         if (!result.ViewModelReloadRequired) return;
 
+        RefreshAccountList();
+
+        StateHasChanged();
+    }
+
+    private void RefreshAccountList()
+    {
         InitializeAccountCategories();
 
-        result = _dataContext.LoadData();
+        var result = _dataContext.LoadData();
 
         if (!result.IsSuccessful)
         {
@@ -109,8 +117,6 @@ public partial class Account : ComponentBase
         {
             InsertAccount(account);
         }
-
-        StateHasChanged();
     }
 
     private void InitializeAccountCategories()
@@ -152,10 +158,12 @@ public partial class Account : ComponentBase
 
     private void ShowDrawer<T>(AccountType accountType) where T : IFragment, new()
     {
-        DrawerService.RenderFragment = FragmentExtension.CreateRenderFragmentFrom<FormComponent<T, AccountModel>, AccountModel>(CreateNewAccount,
+        DrawerService.RenderFragment = FragmentExtension.CreateRenderFragmentFrom<FormComponent<T, AccountDetailViewModel>, AccountDetailViewModel>(CreateNewAccount,
             new Dictionary<string, object>()
             {
-                { "AccountType", accountType }
+                { "AccountType", accountType },
+                { "AvailableAccounts", accountType == AccountType.Loan 
+                    ? _dataContext.Accounts.Where(x => x.AccountType == AccountType.Cash || x.AccountType == AccountType.Deposit) : [] }
             });
 
         DrawerService.ToggleDrawer("Add New Account");

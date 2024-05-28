@@ -4,7 +4,7 @@ using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
 namespace OpenBudgeteer.Blazor.Pages.Accounts;
 
-public partial class CreateAccountForm : ComponentBase
+public partial class AccountForm : ComponentBase
 {
     private IEnumerable<string> GetSubTypes()
     {

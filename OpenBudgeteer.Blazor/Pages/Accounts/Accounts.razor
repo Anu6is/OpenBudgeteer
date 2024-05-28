@@ -2,11 +2,11 @@
 
 @inject DrawerService DrawerService
 
-<Condition Evaluation="@_initialized">
+<Condition Evaluation="_initialized">
     <Match>
         <ActionBar>
             <Label>
-                <MudText Typo="Typo.h6">Accounts</MudText>
+                <MudText Typo="Typo.h5">Accounts</MudText>
             </Label>
             <Actions>
                 <MudStack Class="flex-wrap" Row="true" AlignItems="AlignItems.Center">
@@ -22,11 +22,11 @@
 
                     <MudMenu Color="Color.Primary" Variant="Variant.Filled" Label="Add Account" StartIcon="@Icons.Material.Filled.Add"
                              AnchorOrigin="Origin.BottomLeft" TransformOrigin="Origin.TopLeft">
-                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Cash))">Cash Account</MudMenuItem>
-                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Deposit))">Bank Account</MudMenuItem>
-                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Credit))">Credit Card Account</MudMenuItem>
-                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Investment))">Investment Account</MudMenuItem>
-                        <MudMenuItem OnClick="@(() => ShowDrawer<CreateAccountForm>(AccountType.Loan))">Loan</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<AccountForm>(AccountType.Cash))">Cash Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<AccountForm>(AccountType.Deposit))">Bank Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<AccountForm>(AccountType.Credit))">Credit Card Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<AccountForm>(AccountType.Investment))">Investment Account</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => ShowDrawer<AccountForm>(AccountType.Loan))">Loan</MudMenuItem>
                     </MudMenu>
                 </MudStack>
             </Actions>

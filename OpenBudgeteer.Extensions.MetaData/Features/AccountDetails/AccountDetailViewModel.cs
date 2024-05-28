@@ -7,6 +7,8 @@ namespace OpenBudgeteer.Extensions.MetaData.Features.AccountDetails;
 
 public class AccountDetailViewModel : AccountViewModel
 {
+    public readonly Guid AccountDetailId;
+
     public AccountType AccountType { get; set; }
 
     public Currency? Currency { get; set; }
@@ -17,6 +19,8 @@ public class AccountDetailViewModel : AccountViewModel
 
     public DateTime? EffectiveDate { get; set; }
 
+    public Guid? AssociatedAccountId { get; set; }
+
     public ICollection<BudgetUser> Owners { get; set; } = [];
 
     public AccountDetailViewModel() : this(null, null) { }
@@ -25,6 +29,7 @@ public class AccountDetailViewModel : AccountViewModel
     {
         if (accountDetail is null) return;
 
+        AccountDetailId = accountDetail.Id;
         Alias = accountDetail.Alias;
         SubType = accountDetail.SubType;
         Currency = accountDetail.Currency;
@@ -34,6 +39,8 @@ public class AccountDetailViewModel : AccountViewModel
 
     protected AccountDetailViewModel(AccountDetailViewModel viewModel) : base(viewModel)
     {
+        AccountDetailId = viewModel.AccountDetailId;
+
         Alias = viewModel.Alias;
         SubType = viewModel.SubType;
         Balance = viewModel.Balance;
@@ -56,6 +63,7 @@ public class AccountDetailViewModel : AccountViewModel
     {
         return new AccountDetail
         {
+            Id = AccountDetailId,
             Alias = Alias,
             SubType = SubType,
             Currency = Currency!,

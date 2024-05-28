@@ -1,6 +1,5 @@
 ﻿@using OpenBudgeteer.Extensions.MetaData.Features.AccountDetails
 
-
 <MudStack Spacing="4">
     <MudStack Class="d-flex flex-wrap" Row="true" Spacing="1">
         <MudText Class="white-text" Style="font-weight:600" Typo="Typo.h6" HtmlTag="span">@Title</MudText>
@@ -33,10 +32,10 @@
         _customCulture = new CultureInfo(CultureInfo.CurrentCulture.Name)
             {
                 NumberFormat =
-            {
-                CurrencySymbol = Currency.Symbol,
-                CurrencyDecimalDigits = 0
-            }
+                {
+                    CurrencySymbol = Currency.Symbol,
+                    CurrencyDecimalDigits = 0
+                }
             };
     }
 }

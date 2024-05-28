@@ -28,7 +28,7 @@
                                     <MudHidden Breakpoint="Breakpoint.SmAndDown">
                                         <MudSpacer />
                                         <MudText Class="mr-n2 header-text" HtmlTag="span" Typo="Typo.h6">
-                                            @context.Accounts.Sum(x => (decimal)x.Balance).ToString("C", _customCulture)
+                                            @context.Accounts.Sum(x => GetDisplayBalance(x)).ToString("C", _customCulture)
                                         </MudText>
                                         <MudText Class="mr-4 align-self-end" HtmlTag="span" Typo="Typo.caption">
                                             @context.Accounts.First().Currency!.IsoCode
@@ -52,7 +52,7 @@
                                                     <MudIcon Size="Size.Small" />
                                                 </Match>
                                                 <NotMatch>
-                                                    <MudTooltip Text="@account.Alias">
+                                                    <MudTooltip Text="@account.Alias" Placement="Placement.Right">
                                                         <MudBadge Color="@GetStatusColor(account)" Visible="@ShowBadge(account)" Dot>
                                                             <MudAvatar Color="Color.Primary" Size="Size.Small">@account.Alias!.ToUpper()[0]</MudAvatar>
                                                         </MudBadge>
@@ -61,14 +61,14 @@
                                             </Condition>
                                         </NotMatch>
                                     </Condition>
-                                    <MudTooltip Text="@account.SubType">
+                                    <MudTooltip Text="@account.SubType" Placement="Placement.Right">
                                         <MudText Class="pl-4" HtmlTag="span" Typo="Typo.subtitle1">@account.Name</MudText>
                                     </MudTooltip>
                                 </MudStack>
                                 <MudStack Row Class="flex-grow-1" AlignItems="AlignItems.Center" Justify="Justify.FlexStart" StretchItems="StretchItems.Start">
                                     <MudBreakpointProvider OnBreakpointChanged="@SetJustify">
                                         <MudStack Row AlignItems="AlignItems.Center" Justify="@JustifyStartOrEnd" Spacing="0">
-                                            <MudText Class="pl-12" HtmlTag="span" Typo="Typo.subtitle1">@(((decimal)account.Balance).ToString("C", _customCulture))</MudText>
+                                            <MudText Class="pl-12" HtmlTag="span" Typo="Typo.subtitle1">@(GetDisplayBalance(account).ToString("C", _customCulture))</MudText>
                                             <MudText Class="pl-1 pt-1" HtmlTag="span" Typo="Typo.caption">@account.Currency!.IsoCode</MudText>
                                         </MudStack>
                                         <MudMenu Class="align-self-end mr-n3" Icon="@Icons.Material.Filled.MoreVert" Dense="true"
@@ -169,6 +169,11 @@
         };
     }
 
+    private decimal GetDisplayBalance(AccountDetailViewModel account)
+    {
+        return account.SubType is SubType.Loan.Borrowing ? -1 * account.Balance : account.Balance;
+    }
+
     private void SetJustify(Breakpoint breakpoint)
     {
         JustifyStartOrEnd = breakpoint switch
@@ -233,12 +238,7 @@
         await OnDeleteAccount.InvokeAsync(account);
     }
 
-    private void EditAccount(AccountDetailViewModel account)
-    {
-        DrawerService.ToggleDrawer("Edit Account Details");
-    }
-
-    private async Task UpdateAccountAsync(AccountDetailViewModel account)
+    private async Task EditAccount(AccountDetailViewModel account)
     {
         await OnEditAccount.InvokeAsync(account);
     }
@@ -252,21 +252,22 @@
 
     private BalanceModel LoanSummary()
     {
-        var payable = GetLimit(BalanceType.Payable);
-        var receivable = GetLimit(BalanceType.Receivable);
+        var payable = GetBalance(BalanceType.Payable) * -1;
+        var payableLimit = GetLimit(BalanceType.Payable);
+        var receivableLimit = GetLimit(BalanceType.Receivable);
 
-        return new("I Have", GetBalance(BalanceType.Payable), "I am Owed", GetBalance(BalanceType.Receivable))
+        return new("I Owe", payable == 0 ? 0 : payable, "I am Owed", GetBalance(BalanceType.Receivable))
         {
             Amount = (lineOne, _) => lineOne,
-            BarMax = (_, _) => payable + receivable,
-            BarValue = (lineOne, lineTwo) => (payable - lineOne) + (receivable - lineTwo)
+            BarMax = (_, _) => payableLimit + receivableLimit,
+            BarValue = (lineOne, lineTwo) => (payableLimit - lineOne) + (receivableLimit - lineTwo)
         };
     }
 
     private BalanceModel NetWorth()
     {
         var assets = GetBalance(BalanceType.Asset) + GetBalance(BalanceType.Deferred) + GetLimit(BalanceType.Receivable);
-        var liabilities = GetBalance(BalanceType.Liability) + GetBalance(BalanceType.Payable);
+        var liabilities = GetBalance(BalanceType.Liability) + (GetBalance(BalanceType.Payable) * -1);
 
         return new("I Have", assets, "I Owe", liabilities)
         {
@@ -284,7 +285,7 @@
     private double GetLimit(BalanceType type) => CurrencyAccounts
         .Where(model => model.Type == type)
         .SelectMany(model => model.Accounts)
-        .Sum(account => 0); //TODO - (double)account.Limit
+        .Sum(account => (double)(account.In + account.Out));
 }
 
 <style>
