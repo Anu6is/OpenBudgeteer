@@ -11,23 +11,17 @@ public class AccountManager(ExtendedServiceManager serviceManager)
         try
         {
             var account = accountDetailModel.ToAccount();
-            account = serviceManager.AccountService.Create(account); //create account
+            account = serviceManager.AccountService.Create(account);
 
             var accountDetails = accountDetailModel.ToAccountDetail();
             accountDetails.AccountId = account.Id;
-            serviceManager.AccountDetailService.Create(accountDetails); //add account details
+            serviceManager.AccountDetailService.Create(accountDetails);
 
-            if (accountDetailModel.Balance != 0 && accountDetailModel.SubType is not SubType.Loan.Lending) //fund account
-            {
-                CreateBucketTransaction(account.Id, SystemBucket.Income, accountDetailModel.Balance,
-                                        DateTime.Now.Subtract(TimeSpan.FromDays(1)), GetCreationMemo(accountDetailModel.SubType));
-            }
+            FundAccount(accountDetailModel, account);
 
-            if (accountDetailModel.AccountType == AccountType.Loan) 
+            if (accountDetailModel.AccountType == AccountType.Loan)
             {
-                var result = accountDetailModel.SubType!.Equals(SubType.Loan.Borrowing)
-                    ? DepositLoanTo(accountDetailModel.AssociatedAccountId!.Value, accountDetails, accountDetailModel.Balance)
-                    : WithdrawLoanFrom(accountDetailModel.AssociatedAccountId!.Value, accountDetails, accountDetailModel.Balance);
+                var result = HandleLoanAccount(accountDetailModel, accountDetails);
 
                 if (!result.IsSuccessful) return result;
             }
@@ -40,7 +34,23 @@ public class AccountManager(ExtendedServiceManager serviceManager)
         }
     }
 
-    public static string GetCreationMemo(string? subType) => subType switch
+    private void FundAccount(AccountDetailViewModel accountDetailModel, Account account)
+    {
+        if (accountDetailModel.Balance != 0 && accountDetailModel.SubType is not SubType.Loan.Lending)
+        {
+            CreateBucketTransaction(account.Id, SystemBucket.Income, accountDetailModel.Balance,
+                                    DateTime.Now.Subtract(TimeSpan.FromDays(1)), GetCreationMemo(accountDetailModel.SubType));
+        }
+    }
+
+    private ViewModelOperationResult HandleLoanAccount(AccountDetailViewModel accountDetailModel, AccountDetail accountDetails)
+    {
+        return accountDetailModel.SubType!.Equals(SubType.Loan.Borrowing)
+            ? DepositLoanTo(accountDetailModel.AssociatedAccountId!.Value, accountDetails, accountDetailModel.Balance)
+            : WithdrawLoanFrom(accountDetailModel.AssociatedAccountId!.Value, accountDetails, accountDetailModel.Balance);
+    }
+
+    private static string GetCreationMemo(string? subType) => subType switch
     {
         SubType.Credit.Mastercard or SubType.Credit.Visa => "Current Balance",
         SubType.Loan.Borrowing => "Loan Acquisition",
@@ -52,7 +62,6 @@ public class AccountManager(ExtendedServiceManager serviceManager)
     {
         try
         {
-            //Create transaction
             var bankTransaction = new BankTransaction
             {
                 Id = Guid.Empty,
@@ -64,7 +73,6 @@ public class AccountManager(ExtendedServiceManager serviceManager)
 
             bankTransaction = serviceManager.BankTransactionService.Create(bankTransaction);
 
-            //Assign to bucket
             var bucketTransaction = new BudgetedTransaction()
             {
                 Id = Guid.Empty,
@@ -91,17 +99,56 @@ public class AccountManager(ExtendedServiceManager serviceManager)
     /// <param name="balance">The amount to be deposited</param>
     private ViewModelOperationResult DepositLoanTo(Guid associatedAccountId, AccountDetail sourceAccount, decimal balance)
     {
-        var result = Transfer(sourceAccount.AccountId, associatedAccountId, balance, $"Loan received from {sourceAccount.Alias}");
+        var result = TransferBetweenAccounts(sourceAccount.AccountId, associatedAccountId, balance, $"Loan received from {sourceAccount.Alias}");
 
         if (!result.IsSuccessful) return result;
 
-        //add value to payables bucket
+        var months = CalculatePaybackMonths(DateTime.Today, sourceAccount.EffectiveDate!.Value);
+        var monthlyPayment = Math.Round(balance / months, 2);
+        var bucket = CreateLoanRepaymentBucket(sourceAccount, monthlyPayment);
+
+        serviceManager.BucketService.Create(bucket);
+
         result = CreateBucketTransaction(sourceAccount.AccountId, SystemBucket.Payables, -balance, DateTime.Now,
                                          $"Loan payable to {sourceAccount.Alias} by {sourceAccount.EffectiveDate:yyyy-MM-dd}");
 
-        //create expense by month bucket to track repaying the loan
-
         return result.IsSuccessful ? new ViewModelOperationResult(true) : result;
+    }
+
+    private static Bucket CreateLoanRepaymentBucket(AccountDetail sourceAccount, decimal monthlyPayment)
+    {
+        return new Bucket()
+        {
+            Id = Guid.Empty,
+            BucketGroupId = SystemBucket.Group.AutoGenerated,
+            Name = $"Loan Repayment: {sourceAccount.Alias}",
+            ValidFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+            ColorCode = "IndianRed",
+            TextColorCode = "White",
+            CurrentVersion = new BucketVersion
+            {
+                Version = 1,
+                Notes = sourceAccount.AccountId.ToString(),
+                BucketType = (int)BucketType.MonthlyExpense,
+                BucketTypeZParam = sourceAccount.EffectiveDate!.Value,
+            },
+            BucketMovements = [new BucketMovement
+            {
+                Amount = monthlyPayment,
+                MovementDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).AddMonths(1)
+            }]
+        };
+    }
+
+    private static int CalculatePaybackMonths(DateTime startDate, DateTime endDate)
+    {
+        int yearsDifference = endDate.Year - startDate.Year;
+        int monthsDifference = endDate.Month - startDate.Month;
+        int totalMonthsDifference = (yearsDifference * 12) + monthsDifference;
+
+        totalMonthsDifference--;
+
+        return totalMonthsDifference;
     }
 
     /// <summary>
@@ -113,12 +160,27 @@ public class AccountManager(ExtendedServiceManager serviceManager)
     /// <returns></returns>
     private ViewModelOperationResult WithdrawLoanFrom(Guid associatedAccountId, AccountDetail destinationAccount, decimal balance)
     {
-        var result = Transfer(associatedAccountId, destinationAccount.AccountId, balance, $"Give loan to {destinationAccount.Alias}");
+        var result = TransferBetweenAccounts(associatedAccountId, destinationAccount.AccountId, balance, $"Give loan to {destinationAccount.Alias}");
 
         if (!result.IsSuccessful) return result;
 
-        //payout loan
-        var bucket = new Bucket()
+        var bucket = CreateLoanPayoutBucket(destinationAccount, balance);
+
+        bucket = serviceManager.BucketService.Create(bucket);
+
+        result = CreateBucketTransaction(destinationAccount.AccountId, bucket.Id, -balance, DateTime.Now, $"Loan payout to {destinationAccount.Alias}");
+
+        if (!result.IsSuccessful) return result;
+
+        result = CreateBucketTransaction(destinationAccount.AccountId, SystemBucket.Receivables, balance, DateTime.Now,
+                                         $"Loan recoverable from {destinationAccount.Alias} by {destinationAccount.EffectiveDate:yyyy-MM-dd}");
+
+        return result.IsSuccessful ? new ViewModelOperationResult(true) : result;
+    }
+
+    private static Bucket CreateLoanPayoutBucket(AccountDetail destinationAccount, decimal balance)
+    {
+        return new Bucket()
         {
             Id = Guid.Empty,
             BucketGroupId = SystemBucket.Group.AutoGenerated,
@@ -126,9 +188,9 @@ public class AccountManager(ExtendedServiceManager serviceManager)
             ValidFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
             ColorCode = "IndianRed",
             TextColorCode = "White",
-            CurrentVersion = new BucketVersion 
-            { 
-                Version = 1, 
+            CurrentVersion = new BucketVersion
+            {
+                Version = 1,
                 BucketType = (int)BucketType.StandardBucket
             },
             BucketMovements = [new BucketMovement
@@ -137,19 +199,6 @@ public class AccountManager(ExtendedServiceManager serviceManager)
                 MovementDate = DateTime.Now
             }]
         };
-
-        bucket = serviceManager.BucketService.Create(bucket);
-
-        result = CreateBucketTransaction(destinationAccount.AccountId, bucket.Id, -balance, DateTime.Now, $"Loan payout to {destinationAccount.Alias}");
-
-        if (!result.IsSuccessful) return result;
-
-        //add value to receivables bucket
-        result = CreateBucketTransaction(destinationAccount.AccountId, SystemBucket.Receivables, balance, DateTime.Now,
-                                         $"Loan recoverable from {destinationAccount.Alias} by {destinationAccount.EffectiveDate:yyyy-MM-dd}");
-
-        //create save by date bucket to track recovering the loan
-        return result.IsSuccessful ? new ViewModelOperationResult(true) : result;
     }
 
     public ViewModelOperationResult UpdateAccount(AccountDetailViewModel accountDetailModel)
@@ -171,11 +220,11 @@ public class AccountManager(ExtendedServiceManager serviceManager)
 
     }
 
-    public ViewModelOperationResult Transfer(Guid sourceAccountId, Guid destinationAccountId, decimal amount, string memo = "Account transfer")
+    public ViewModelOperationResult TransferBetweenAccounts(Guid sourceAccountId, Guid destinationAccountId, decimal amount, string memo = "Account transfer")
     {
         try
         {
-            CreateBucketTransaction(sourceAccountId, SystemBucket.Transfer, -amount, DateTime.Now, $"Initiate transfer: {memo}");
+            CreateBucketTransaction(sourceAccountId, SystemBucket.Transfer, -1 * amount, DateTime.Now, $"Initiate transfer: {memo}");
 
             CreateBucketTransaction(destinationAccountId, SystemBucket.Transfer, amount, DateTime.Now, $"Finalize transer: {memo}");
 
