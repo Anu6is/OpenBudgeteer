@@ -16,9 +16,9 @@
                 </MudButtonGroup>
             </Match>
         </Condition>
-        <MudExpansionPanels MultiExpansion="true" Elevation="3">
+        <MudExpansionPanels Class="mud-background-gray" MultiExpansion="true" Elevation="3">
             <Iteration Items="@CurrencyAccounts">
-                <MudExpansionPanel Expanded="@ExpandedPanels.Contains(context.DisplayName)" ExpandedChanged="@((isExpanded) => Expanded(context.DisplayName, isExpanded))">
+                <MudExpansionPanel Class="mud-background-gray" Expanded="@ExpandedPanels.Contains(context.DisplayName)" ExpandedChanged="@((isExpanded) => Expanded(context.DisplayName, isExpanded))">
                     <TitleContent>
                         <MudStack Row="true" Class="d-flex flex-wrap">
                             <MudIcon Icon="@context.Icon" class="mr-2"></MudIcon>
@@ -96,8 +96,19 @@
         </MudExpansionPanels>
     </MudStack>
 </MudPaper>
+
 <Condition Evaluation="SelectedCurrency is not null">
     <Match>
+        <MudPaper Class="mud-background-gray d-flex px-8 py-10 mb-12" Elevation="5" >
+            <MudNavMenu>
+                <MudText Typo="Typo.h6" Style="font-weight:600;" Align="Align.Center">Quick Actions</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink OnClick="@(() => null)">Pay Credit Card</MudNavLink>
+                <MudNavLink OnClick="@(() => null)">Collect Payment</MudNavLink>
+                <MudNavLink OnClick="@(() => null)">Account Transfer</MudNavLink>
+            </MudNavMenu>
+        </MudPaper>
+
         <BalanceSummary Currency="@SelectedCurrency" Savings="@SavingsSummary()" Loans="LoanSummary()" NetWorth="NetWorth()" />
     </Match>
 </Condition>
